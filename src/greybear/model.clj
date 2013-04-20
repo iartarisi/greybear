@@ -19,7 +19,7 @@
                        [:id :serial "primary key"]
                        [:white_id :serial "references players (id)"]
                        [:black_id :serial "references players (id)"]
-                       [:board "varchar"])))
+                       [:stones "varchar"])))
 
 (defdb korma-db psql)
 
