@@ -13,5 +13,5 @@
                  [compojure "1.1.5"]
                  [hiccup "1.0.3"]]
   :plugins [[lein-ring "0.8.3"]]
-  :main greybear.server
+  :main greybear.websocket
   :ring {:handler greybear.server/app})

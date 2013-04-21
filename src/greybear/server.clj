@@ -1,7 +1,4 @@
 (ns greybear.server
-  (:gen-class)
-  (:import [org.webbitserver WebServer WebServers WebSocketHandler]
-            [org.webbitserver.handler StaticFileHandler])
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
   (:use [ring.adapter.jetty]
@@ -40,9 +37,3 @@
 (def app
   (-> (handler/site main-routes)
       (wrap-base-url)))
-
-(defn -main
-  [& args]
-  (doto (WebServers/createWebServer 8080)
-    (.add (StaticFileHandler. "resources/public"))
-    (.start)))
