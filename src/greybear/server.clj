@@ -25,7 +25,7 @@
       (include-js "goboard.js")]
      [:body
       [:canvas#goBoard]
-      (javascript-tag (format "goboard.goboard.draw(\"goBoard\", %s, 18, 17);"
+      (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, 18, 17);"
                               (stones-to-js (board :stones))))]
      )))
 
