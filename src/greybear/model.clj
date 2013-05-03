@@ -25,6 +25,11 @@
 
 (declare player-b player-w games)
 
+(defentity players
+  (table :players)
+  (entity-fields :name)
+  (has-many games {:fk :black_id}))
+
 (defentity player-b
   (table :players)
   (entity-fields :name)
