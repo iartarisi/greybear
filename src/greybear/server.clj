@@ -15,20 +15,20 @@
   [stones]
   (format "[%s]" (apply str (interpose ", " (map str stones)))))
 
-(defn index-page []
+(defn games-page [game-id]
   (let [board (first
                (select games
                        (fields :stones
                                [:white.name :white]
                                [:black.name :black])
-                       (where {:id 2})
+                       (where {:id game-id})
                        (join [players :white] (= :games.white_id :white.id))
                        (join [players :black] (= :games.black_id :black.id))
                        (limit 1)))]
     (html5
      [:head
       [:title "Grey Bear"]
-      (include-js "goboard.js")]
+      (include-js "/goboard.js")]
      [:body
       [:div#players "Players: " (board :white) " vs. " (board :black)]
       [:canvas#goBoard]
@@ -37,7 +37,7 @@
      )))
 
 (defroutes main-routes
-  (GET "/" [] (index-page))
+  (GET "/games/:id" [id] (games-page (Integer. id)))
   (route/resources "/")
   (route/not-found "Page not found"))
 
