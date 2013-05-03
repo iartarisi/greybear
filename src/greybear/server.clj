@@ -24,7 +24,7 @@
      [:body
       [:div#players "Players: " (game :white) " vs. " (game :black)]
       [:canvas#goBoard]
-      (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, 18, 17);"
+      (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
                               (stones-to-js (game :stones))))])))
 
 (defroutes main-routes
