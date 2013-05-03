@@ -28,7 +28,7 @@
     (html5
      [:head
       [:title "Grey Bear"]
-      (include-js "/goboard.js")]
+      (include-js "/js/goboard.js")]
      [:body
       [:div#players "Players: " (board :white) " vs. " (board :black)]
       [:canvas#goBoard]
