@@ -1,0 +1,2 @@
+(ns greybear
+  (:require [goboard]))

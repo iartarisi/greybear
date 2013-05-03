@@ -20,7 +20,7 @@
     (html5
      [:head
       [:title "Grey Bear"]
-      (include-js "/js/goboard.js")]
+      (include-js "/js/greybear.js")]
      [:body
       [:div#players "Players: " (game :white) " vs. " (game :black)]
       [:canvas#goBoard]
