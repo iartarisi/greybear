@@ -17,8 +17,8 @@
 
 (defn index-page []
   (let [board (first (select games
-                              (where {:id 2})
-                              (limit 1)))]
+                             (where {:id 2})
+                             (limit 1)))]
     (html5
      [:head
       [:title "Grey Bear"]
