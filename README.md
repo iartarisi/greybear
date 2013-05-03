@@ -4,7 +4,17 @@ A Clojure library designed to ... well, that part is up to you.
 
 ## Usage
 
-FIXME
+Start the websocket server with:
+
+```
+$ lein run
+```
+
+Start the webserver with:
+
+```
+$ lein ring server
+```
 
 ## License
 
