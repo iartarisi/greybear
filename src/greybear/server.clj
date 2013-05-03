@@ -5,7 +5,6 @@
         [hiccup core element page]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET]]
-        [korma core]
         [greybear.model :only [read-game]]))
 
 (defn stones-to-js
