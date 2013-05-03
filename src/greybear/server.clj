@@ -6,7 +6,7 @@
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET]]
         [korma core]
-        [greybear.model :only [games players]]))
+        [greybear.model :only [read-game]]))
 
 (defn stones-to-js
   "Transforms a string of chars into a JSON array
@@ -16,25 +16,16 @@
   (format "[%s]" (apply str (interpose ", " (map str stones)))))
 
 (defn games-page [game-id]
-  (let [board (first
-               (select games
-                       (fields :stones
-                               [:white.name :white]
-                               [:black.name :black])
-                       (where {:id game-id})
-                       (join [players :white] (= :games.white_id :white.id))
-                       (join [players :black] (= :games.black_id :black.id))
-                       (limit 1)))]
+  (let [game (read-game game-id)]
     (html5
      [:head
       [:title "Grey Bear"]
       (include-js "/js/goboard.js")]
      [:body
-      [:div#players "Players: " (board :white) " vs. " (board :black)]
+      [:div#players "Players: " (game :white) " vs. " (game :black)]
       [:canvas#goBoard]
       (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, 18, 17);"
-                              (stones-to-js (board :stones))))]
-     )))
+                              (stones-to-js (game :stones))))])))
 
 (defroutes main-routes
   (GET "/games/:id" [id] (games-page (Integer. id)))

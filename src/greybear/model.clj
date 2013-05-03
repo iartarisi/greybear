@@ -45,3 +45,15 @@
   (entity-fields :board :white :black)
   (belongs-to player-w {:fk :white_id})
   (belongs-to player-b {:fk :black_id}))
+
+
+(defn read-game [game-id]
+  (first
+   (select games
+           (fields :stones
+                   [:white.name :white]
+                   [:black.name :black])
+           (where {:id game-id})
+           (join [players :white] (= :games.white_id :white.id))
+           (join [players :black] (= :games.black_id :black.id))
+           (limit 1))))
