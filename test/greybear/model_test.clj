@@ -16,8 +16,7 @@
          [{:name "foo"}])))
 
 (deftest user-create-already-exists
-  (clear-database)
-  (create-user "foo" "bar")
+  (user-create)
   (is (nil? (create-user "foo" "bar")))
   (is (= {:cnt 1}
          (first (select players
