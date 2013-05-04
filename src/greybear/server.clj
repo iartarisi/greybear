@@ -1,8 +1,8 @@
 (ns greybear.server
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
-  (:use [ring.adapter.jetty]
-        [ring.middleware.session]
+  (:use
+        [ring.middleware.session :only [wrap-session]]
         [hiccup core element page]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET]]
@@ -40,5 +40,5 @@
 
 (def app
   (-> (handler/site main-routes)
-      (wrap-session {:store (cookie-store {:key "a 16-byte secret"})})
+      (wrap-session)
       (wrap-base-url)))
