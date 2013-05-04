@@ -1,11 +1,19 @@
 (ns greybear.model-test
+  (:require [clojure.java.jdbc :as jdbc])
   (:use clojure.test
-        [korma.core]
+        korma.core
         greybear.model))
 
+(def test-conn {:classname "org.postgresql.Driver"
+                :subprotocol "postgresql"
+                :subname "//localhost/greybear-test"
+                :user "greybear-test"
+                :password "greybear-test"})
+
 (defn clear-database []
-  (teardown)
-  (setup))
+  (jdbc/with-connection test-conn
+    (teardown)
+    (setup)))
 
 (deftest user-create
   (clear-database)

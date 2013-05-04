@@ -10,24 +10,24 @@
            :password "greybear"})
 
 (defn setup
+  "use with a jdbc connection"
   []
-  (jdbc/with-connection psql
-    (jdbc/create-table :players
-                       [:id :serial "primary key"]
-                       [:name "varchar" :unique]
-                       [:password "varchar"])
+  (jdbc/create-table :players
+                     [:id :serial "primary key"]
+                     [:name "varchar" :unique]
+                     [:password "varchar"])
 
-    (jdbc/create-table :games
-                       [:id :serial "primary key"]
-                       [:white_id :serial "references players (id)"]
-                       [:black_id :serial "references players (id)"]
-                       [:stones "varchar"])))
+  (jdbc/create-table :games
+                     [:id :serial "primary key"]
+                     [:white_id :serial "references players (id)"]
+                     [:black_id :serial "references players (id)"]
+                     [:stones "varchar"]))
 
 (defn teardown
+  "use with a jdbc connection"
   []
-  (jdbc/with-connection psql
-    (jdbc/drop-table :games)
-    (jdbc/drop-table :players)))
+  (jdbc/drop-table :games)
+  (jdbc/drop-table :players))
 
 (defdb korma-db psql)
 
