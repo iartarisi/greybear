@@ -32,9 +32,19 @@
        (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
                                (stones-to-js (game :stones))))])}))
 
+(def login
+  (html5
+   [:body
+    [:div#login
+     (form-to [:post "/login"]
+              [:div#username (text-field "username")]
+              [:div#password (password-field "password")]
+              (submit-button "login"))]]))
+
 (defroutes main-routes
   (GET "/games/:id" [id :as {session :session}]
        (games-page session (Integer. id)))
+  (GET "/login" [] login)
   (route/resources "/")
   (route/not-found "Page not found"))
 
