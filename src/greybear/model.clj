@@ -1,6 +1,7 @@
 (ns greybear.model
   (:require [clojure.java.jdbc :as jdbc])
-  (:use [korma db core]))
+  (:use [korma db core]
+        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]))
 
 (def psql {:classname "org.postgresql.Driver"
            :subprotocol "postgresql"
@@ -13,7 +14,8 @@
   (jdbc/with-connection psql
     (jdbc/create-table :players
                        [:id :serial "primary key"]
-                       [:name "varchar"])
+                       [:name "varchar" :unique]
+                       [:password "varchar"])
 
     (jdbc/create-table :games
                        [:id :serial "primary key"]
@@ -21,13 +23,19 @@
                        [:black_id :serial "references players (id)"]
                        [:stones "varchar"])))
 
+(defn teardown
+  []
+  (jdbc/with-connection psql
+    (jdbc/drop-table :games)
+    (jdbc/drop-table :players)))
+
 (defdb korma-db psql)
 
 (declare player-b player-w games)
 
 (defentity players
   (table :players)
-  (entity-fields :name)
+  (entity-fields :name :password)
   (has-many games {:fk :black_id}))
 
 (defentity player-b
@@ -57,3 +65,10 @@
            (join [players :white] (= :games.white_id :white.id))
            (join [players :black] (= :games.black_id :black.id))
            (limit 1))))
+(defn create-user
+  [username password]
+  (try
+    (insert players
+            (values {:name username :password (hash-bcrypt password)}))
+    (catch org.postgresql.util.PSQLException e
+      nil)))
