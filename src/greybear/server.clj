@@ -1,11 +1,12 @@
 (ns greybear.server
+  (:import org.mindrot.jbcrypt.BCrypt)
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
-  (:use
-        [ring.middleware.session :only [wrap-session]]
+  (:use [ring.middleware.session :only [wrap-session]]
         [hiccup core element page]
         [hiccup.middleware :only [wrap-base-url]]
-        [compojure.core :only [defroutes GET]]
+        [compojure.core :only [defroutes GET POST]]
+        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
         [greybear.model :only [read-game]]))
 
 (defn stones-to-js
@@ -32,7 +33,7 @@
        (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
                                (stones-to-js (game :stones))))])}))
 
-(def login
+(def login-page
   (html5
    [:body
     [:div#login
@@ -41,10 +42,27 @@
               [:div#password (password-field "password")]
               (submit-button "login"))]]))
 
+(def users
+  {"foo" (hash-bcrypt "bar")})
+
+(defn login
+  [request]
+  (let [creds (get request :params)]
+    (if creds
+      (let [{:keys [username password]} creds]
+        (if (bcrypt-verify password (users username))
+          ;; TODO redirect to where the user came from
+          (-> (redirect-after-post "/")
+              (assoc :session {:user username}))
+          {:body (html5 "Failed authentication.")}))
+      {:body (html5 "no-params")})))
+
 (defroutes main-routes
   (GET "/games/:id" [id :as {session :session}]
        (games-page session (Integer. id)))
-  (GET "/login" [] login)
+  (GET "/login" [] login-page)
+  (POST "/login" request (login request))
+  (GET "/" request (html5 request))
   (route/resources "/")
   (route/not-found "Page not found"))
 
