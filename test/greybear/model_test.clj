@@ -3,11 +3,9 @@
         [korma.core]
         greybear.model))
 
-
-(deftest clear-database
+(defn clear-database []
   (teardown)
   (setup))
-
 
 (deftest user-create
   (clear-database)
