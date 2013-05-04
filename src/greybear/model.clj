@@ -65,6 +65,18 @@
            (join [players :white] (= :games.white_id :white.id))
            (join [players :black] (= :games.black_id :black.id))
            (limit 1))))
+
+(defn verify-user-password
+  "Returns a bool if the password matches or not or nil if the user does
+  not exist."
+  [username password]
+  (let [stored-pass (:password (first (select players
+                                              (fields :password)
+                                              (where {:name username}))))]
+    (if stored-pass
+      (bcrypt-verify password stored-pass)
+      nil)))
+
 (defn create-user
   [username password]
   (try

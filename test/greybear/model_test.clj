@@ -22,3 +22,14 @@
          (first (select players
                         (aggregate (count :*) :cnt))))))
 
+(deftest verify-user-password-test
+  (user-create)
+  (is (true? (verify-user-password "foo" "bar"))))
+
+(deftest verify-user-password-no-user
+  (clear-database)
+  (is (nil? (verify-user-password "foo" "bar"))))
+
+(deftest verify-user-password-wrong-password
+  (user-create)
+  (is (false? (verify-user-password "foo" "qux"))))
