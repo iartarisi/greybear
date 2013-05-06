@@ -3,10 +3,11 @@
             [compojure.handler :as handler])
   (:use [ring.middleware.session :only [wrap-session]]
         [ring.util.response :only [redirect-after-post]]
-        [hiccup core element page form]
+        [hiccup core element page]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET POST]]
         [greybear.model :only [read-game verify-user-password]]
+        [greybear.pages.login :only [login-page]]
         [greybear.error-pages :only [failed-authentication]]))
 
 (defn stones-to-js
@@ -32,15 +33,6 @@
        [:canvas#goBoard]
        (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
                                (stones-to-js (game :stones))))])}))
-
-(def login-page
-  (html5
-   [:body
-    [:div#login
-     (form-to [:post "/login"]
-              [:div#username (text-field "username")]
-              [:div#password (password-field "password")]
-              (submit-button "login"))]]))
 
 (defn login
   [request]
