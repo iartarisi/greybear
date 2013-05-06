@@ -1,4 +1,4 @@
-(ns greybear.error-pages
+(ns greybear.errors
   (:use [hiccup.page :only [html5]]))
 
 (def failed-authentication

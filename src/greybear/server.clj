@@ -8,7 +8,7 @@
         [compojure.core :only [defroutes GET POST]]
         [greybear.model :only [read-game verify-user-password]]
         [greybear.pages.login :only [login-page]]
-        [greybear.error-pages :only [failed-authentication]]))
+        [greybear.pages.errors :only [failed-authentication]]))
 
 (defn stones-to-js
   "Transforms a string of chars into a JSON array
