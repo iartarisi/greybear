@@ -8,7 +8,7 @@
 
 
 (defroutes main-routes
-  (GET "/games/:id" [id :as {session :session}]
+  (GET ["/games/:id", :id #"[0-9]+"] [id :as {session :session}]
        (game session (Integer. id)))
   (GET "/login" [] login-get)
   (POST "/login" request (login-post request))
