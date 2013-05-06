@@ -1,9 +1,9 @@
 (ns greybear.server
-  (:import org.mindrot.jbcrypt.BCrypt)
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
   (:use [ring.middleware.session :only [wrap-session]]
-        [hiccup core element page]
+        [ring.util.response :only [redirect-after-post]]
+        [hiccup core element page form]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET POST]]
         [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
