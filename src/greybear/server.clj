@@ -6,7 +6,8 @@
         [hiccup core element page form]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET POST]]
-        [greybear.model :only [read-game verify-user-password]]))
+        [greybear.model :only [read-game verify-user-password]]
+        [greybear.error-pages :only [failed-authentication]]))
 
 (defn stones-to-js
   "Transforms a string of chars into a JSON array
@@ -50,8 +51,7 @@
           ;; TODO redirect to where the user came from
           (-> (redirect-after-post "/")
               (assoc :session {:user username}))
-          {:status 401
-           :body (html5 "Failed authentication.")}))
+          failed-authentication))
       {:body (html5 "no-params")})))
 
 (defroutes main-routes
