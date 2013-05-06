@@ -2,7 +2,7 @@
   (:use [hiccup element page]
         [greybear.model :only [read-game]]))
 
-(defn stones-to-js
+(defn- stones-to-js
   "Transforms a string of chars into a JSON array
   e.g. \"00120\" becomes: [\"0\", \"0\", \"1\", \"2\", \"0\"]
   "
