@@ -6,8 +6,7 @@
         [hiccup core element page form]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET POST]]
-        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
-        [greybear.model :only [read-game]]))
+        [greybear.model :only [read-game verify-user-password]]))
 
 (defn stones-to-js
   "Transforms a string of chars into a JSON array
@@ -42,19 +41,17 @@
               [:div#password (password-field "password")]
               (submit-button "login"))]]))
 
-(def users
-  {"foo" (hash-bcrypt "bar")})
-
 (defn login
   [request]
   (let [creds (get request :params)]
     (if creds
       (let [{:keys [username password]} creds]
-        (if (bcrypt-verify password (users username))
+        (if (verify-user-password username password)
           ;; TODO redirect to where the user came from
           (-> (redirect-after-post "/")
               (assoc :session {:user username}))
-          {:body (html5 "Failed authentication.")}))
+          {:status 401
+           :body (html5 "Failed authentication.")}))
       {:body (html5 "no-params")})))
 
 (defroutes main-routes
