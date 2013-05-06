@@ -38,6 +38,9 @@
   (entity-fields :name :password)
   (has-many games {:fk :black_id}))
 
+;; player-a and player-b are just hacks to lie to korma that we have two
+;; different entities. Otherwise it won't allow us to create multiple
+;; FKs to the same table
 (defentity player-b
   (table :players)
   (entity-fields :name)
