@@ -1,5 +1,5 @@
 (ns greybear.pages.game
-  (:use [hiccup.element]
+  (:use [hiccup element page]
         [greybear.model :only [read-game]]
         [greybear.pages.layout :only [base-layout]]
         [greybear.pages.errors :only [game-not-found]]))
@@ -25,9 +25,13 @@
       {:session session
        :body
        (base-layout (str "Game #" game-id)
-                    [:div#players "Players: " (game :white) " vs. " (game :black)]
-                    [:div#caca "Username: " session]
-                    [:canvas#goBoard]
+                    [:div.container-fluid
+                     [:div.row-fluid
+                      [:div.span10 [:canvas#goBoard]]
+                      [:div.span2
+                       [:div#players
+                        "Players: " (game :white) " vs. " (game :black)]
+                       [:div#caca "Username: " session]]]]
                     (include-js "/js/greybear.js")
                     (js-draw (game :stones) 1 18 17))}
       (game-not-found game-id))))
