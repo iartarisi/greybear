@@ -2,6 +2,7 @@
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
   (:use [ring.middleware.session :only [wrap-session]]
+        [hiccup.page :only [html5]]
         [hiccup.middleware :only [wrap-base-url]]
         [compojure.core :only [defroutes GET POST]]
         [greybear.pages game login]))
