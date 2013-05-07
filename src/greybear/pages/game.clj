@@ -10,6 +10,12 @@
   [stones]
   (format "[%s]" (apply str (interpose ", " (map str stones)))))
 
+(defn js-draw
+  [stones playing last-x last-y]
+  (javascript-tag
+   (format "goboard.draw(\"goBoard\", %s, %s, greybear.draw_callback, %s, %s)"
+           (stones-to-js stones) playing last-x last-y)))
+
 (defn game [session game-id]
   (let [game (read-game game-id)
         count (:count session 0)
@@ -28,8 +34,3 @@
          (js-draw (game :stones) 1 18 17)])}
       (game-not-found game-id))))
 
-(defn js-draw
-  [stones playing last-x last-y]
-  (javascript-tag
-   (format "goboard.draw(\"goBoard\", %s, %s, greybear.draw_callback, %s, %s)"
-           (stones-to-js stones) playing last-x last-y)))
