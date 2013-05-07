@@ -28,6 +28,7 @@
                     [:div#players "Players: " (game :white) " vs. " (game :black)]
                     [:div#caca "Username: " session]
                     [:canvas#goBoard]
+                    (include-js "/js/greybear.js")
                     (js-draw (game :stones) 1 18 17))}
       (game-not-found game-id))))
 
