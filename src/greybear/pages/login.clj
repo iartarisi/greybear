@@ -1,17 +1,17 @@
 (ns greybear.pages.login
-  (:use [hiccup element form page]
+  (:use [hiccup element form]
         [ring.util.response :only [redirect-after-post]]
         [greybear.pages.errors :only [failed-authentication]]
+        [greybear.pages.layout :only [base-layout]]
         [greybear.model :only [verify-user-password]]))
 
 (def login-get
-  (html5
-   [:body
-    [:div#login
-     (form-to [:post "/login"]
-              [:div#username (text-field "username")]
-              [:div#password (password-field "password")]
-              (submit-button "login"))]]))
+  (base-layout "Login"
+               [:div#login
+                (form-to [:post "/login"]
+                         [:div#username (text-field "username")]
+                         [:div#password (password-field "password")]
+                         (submit-button "login"))]))
 
 (defn login-post
   [request]
@@ -23,4 +23,4 @@
           (-> (redirect-after-post "/")
               (assoc :session {:user username}))
           failed-authentication))
-      {:body (html5 "no-params")})))
+      (base-layout "no-params"))))

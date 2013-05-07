@@ -1,6 +1,7 @@
 (ns greybear.pages.game
-  (:use [hiccup element page]
+  (:use [hiccup.element]
         [greybear.model :only [read-game]]
+        [greybear.pages.layout :only [base-layout]]
         [greybear.pages.errors :only [game-not-found]]))
 
 (defn- stones-to-js
@@ -23,14 +24,10 @@
     (if game
       {:session session
        :body
-       (html5
-        [:head
-         [:title "Grey Bear"]
-         (include-js "/js/greybear.js")]
-        [:body
-         [:div#players "Players: " (game :white) " vs. " (game :black)]
-         [:div#caca "Username: " session]
-         [:canvas#goBoard]
-         (js-draw (game :stones) 1 18 17)])}
+       (base-layout (str "Game #" game-id)
+                    [:div#players "Players: " (game :white) " vs. " (game :black)]
+                    [:div#caca "Username: " session]
+                    [:canvas#goBoard]
+                    (js-draw (game :stones) 1 18 17))}
       (game-not-found game-id))))
 
