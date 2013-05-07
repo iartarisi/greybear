@@ -10,13 +10,17 @@
                 :user "greybear-test"
                 :password "greybear-test"})
 
-(defn clear-database []
+(defn database-fixture [f]
   (jdbc/with-connection test-conn
-    (teardown)
-    (setup)))
+    (try
+      (setup)
+      (f)
+      (finally
+        (teardown)))))
+
+(use-fixtures :each database-fixture)
 
 (deftest user-create
-  (clear-database)
   (create-user "foo" "bar")
   (is (= (select players
                  (fields :name)
@@ -24,20 +28,19 @@
          [{:name "foo"}])))
 
 (deftest user-create-already-exists
-  (user-create)
+  (create-user "foo" "bar")
   (is (nil? (create-user "foo" "bar")))
   (is (= {:cnt 1}
          (first (select players
                         (aggregate (count :*) :cnt))))))
 
 (deftest verify-user-password-test
-  (user-create)
+  (create-user "foo" "bar")
   (is (true? (verify-user-password "foo" "bar"))))
 
 (deftest verify-user-password-no-user
-  (clear-database)
   (is (nil? (verify-user-password "foo" "bar"))))
 
 (deftest verify-user-password-wrong-password
-  (user-create)
+  (create-user "foo" "bar")
   (is (false? (verify-user-password "foo" "qux"))))
