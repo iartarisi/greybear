@@ -20,6 +20,10 @@
 
 (use-fixtures :each database-fixture)
 
+
+(def test-stones
+  (apply str (repeat (* 19 19) "0")))
+
 (deftest user-create
   (create-user "foo" "bar")
   (is (= (select players
@@ -44,3 +48,17 @@
 (deftest verify-user-password-wrong-password
   (create-user "foo" "bar")
   (is (false? (verify-user-password "foo" "qux"))))
+
+(deftest read-game-test
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (insert games
+          (values {:white_id (subselect players
+                                        (fields :id)
+                                        (where {:name [like "user1"]}))
+                   :black_id (subselect players
+                                        (fields :id)
+                                        (where {:name [like "user2"]}))
+                   :stones test-stones}))
+  (is (= {:white "user1" :black "user2" :stones test-stones}
+         (read-game 1))))
