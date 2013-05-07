@@ -87,3 +87,19 @@
             (values {:name username :password (hash-bcrypt password)}))
     (catch org.postgresql.util.PSQLException e
       nil)))
+
+
+(def ^:const starting-stones
+  (apply str (repeat (* 19 19) "0")))
+
+(defn new-game
+  "Start a new game between two players, returns the new game's id"
+  [white black]
+  (:id (insert games
+               (values {:stones starting-stones
+                        :white_id (subselect players
+                                             (fields :id)
+                                             (where (= :name white)))
+                        :black_id (subselect players
+                                             (fields :id)
+                                             (where (= :name black)))}))))

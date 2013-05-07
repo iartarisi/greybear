@@ -1,4 +1,5 @@
 (ns greybear.model-test
+  (:import org.postgresql.util.PSQLException)
   (:require [clojure.java.jdbc :as jdbc])
   (:use clojure.test
         korma.core
@@ -62,3 +63,21 @@
                    :stones test-stones}))
   (is (= {:white "user1" :black "user2" :stones test-stones}
          (read-game 1))))
+
+(deftest new-game-unknown-user-test
+  ;; XXX think about raising better errors and at which layer
+  (is (thrown-with-msg? PSQLException #"null value in column"
+       (new-game "bogus1" "bogus2"))))
+
+(deftest new-game-test
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (testing "return value"
+    (is (= 1
+           (new-game "user1" "user2"))))
+  (testing "new game is in the database"
+    (is (= {:stones starting-stones
+            :white_id 1
+            :black_id 2
+            :id 1}
+           (first (select games))))))
