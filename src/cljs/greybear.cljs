@@ -10,3 +10,7 @@
 (doto (goog.net.WebSocket.)
   (goog.events/listen (.-OPENED goog.net.WebSocket/EventType) on-open)
   (.open "ws://localhost:8080/websocket"))
+
+(defn draw-callback
+  [x y]
+  (.log js/console x y))

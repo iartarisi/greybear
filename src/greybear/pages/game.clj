@@ -25,6 +25,7 @@
          [:div#players "Players: " (game :white) " vs. " (game :black)]
          [:div#caca "Username: " session]
          [:canvas#goBoard]
-         (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
-                                 (stones-to-js (game :stones))))])}
+         (javascript-tag
+          (format "goboard.draw(\"goBoard\", %s, 1, greybear.draw_callback, 18, 17);"
+                  (stones-to-js (game :stones))))])}
       (game-not-found game-id))))
