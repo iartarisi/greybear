@@ -5,6 +5,7 @@
   {:status 401
    :body (html5 "Failed authentication.")})
 
-(def game-not-found
+(defn game-not-found
+  [game-id]
   {:status 404
    :body (html5 (format "Game not found: %s." game-id))})

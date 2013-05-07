@@ -27,4 +27,4 @@
          [:canvas#goBoard]
          (javascript-tag (format "goboard.draw(\"goBoard\", %s, 1, function(x, y) {console.log(x, y)}, 18, 17);"
                                  (stones-to-js (game :stones))))])}
-      game-not-found)))
+      (game-not-found game-id))))
