@@ -1,5 +1,6 @@
 (ns greybear.pages.layout
-  (:use [hiccup page element]))
+  (:use [hiccup page element]
+        (sandbar stateful-session)))
 
 (defn base-layout
   [subtitle & content]
