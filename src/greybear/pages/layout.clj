@@ -9,4 +9,13 @@
     [:title (str "Grey Bear - " subtitle)]
     (include-css "/bootstrap/css/bootstrap.css")]
    [:body
+    [:div.navbar
+     [:div.navbar-inner
+      [:a.brand {:href "/"} "Greybear"]
+      [:div#user-links
+       [:ul.nav
+        (let [username (session-get :username false)]
+          (if username
+            [:li [:a {:href (str "/users/" username)} username]]
+            [:li [:a {:href "/login"} "Login"]]))]]]]
     [:div#content content]]))
