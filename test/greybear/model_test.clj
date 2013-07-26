@@ -63,15 +63,15 @@
 
 (deftest new-game-unknown-user-test
   ;; XXX think about raising better errors and at which layer
-  (is (thrown-with-msg? PSQLException #"null value in column"
-       (new-game "bogus1" "bogus2"))))
+  (is (thrown-with-msg? PSQLException #"is not present in table"
+       (new-game 1 2))))
 
 (deftest new-game-test
   (create-user "user1" "foo")
   (create-user "user2" "bar")
   (testing "return value"
     (is (= 1
-           (new-game "user1" "user2"))))
+           (new-game 1 2))))
   (testing "new game is in the database"
     (is (= {:stones starting-stones
             :white_id 1

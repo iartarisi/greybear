@@ -97,9 +97,5 @@
   [white black]
   (:id (insert games
                (values {:stones starting-stones
-                        :white_id (subselect players
-                                             (fields :id)
-                                             (where (= :name white)))
-                        :black_id (subselect players
-                                             (fields :id)
-                                             (where (= :name black)))}))))
+                        :white_id white
+                        :black_id black}))))
