@@ -21,11 +21,17 @@
                      [:id :serial "primary key"]
                      [:white_id :serial "references players (id)"]
                      [:black_id :serial "references players (id)"]
-                     [:stones "varchar"]))
+                     [:stones "varchar"])
+
+  (jdbc/create-table :moves
+                     [:move "varchar"]
+                     [:ordinal "smallint"]
+                     [:game_id :serial "references games (id)"]))
 
 (defn teardown
   "use with a jdbc connection"
   []
+  (jdbc/drop-table :moves)
   (jdbc/drop-table :games)
   (jdbc/drop-table :players))
 
@@ -51,12 +57,17 @@
   (entity-fields :name)
   (has-many games {:fk :white_id}))
 
+(defentity moves
+  (table :moves)
+  (entity-fields :move :order)
+  (belongs-to games {:fk :game_id}))
+
 (defentity games
   (table :games)
-  (entity-fields :board :white :black)
+  (entity-fields :board :white :black :moves)
+  (has-many moves {:fk :game_id})
   (belongs-to player-w {:fk :white_id})
   (belongs-to player-b {:fk :black_id}))
-
 
 (defn read-game [game-id]
   (first
@@ -87,7 +98,6 @@
             (values {:name username :password (hash-bcrypt password)}))
     (catch org.postgresql.util.PSQLException e
       nil)))
-
 
 (def ^:const starting-stones
   (apply str (repeat (* 19 19) "0")))
