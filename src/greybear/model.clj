@@ -26,7 +26,9 @@
   (jdbc/create-table :moves
                      [:move "varchar"]
                      [:ordinal "smallint"]
-                     [:game_id :serial "references games (id)"]))
+                     [:game_id :serial "references games (id)"]
+                     ["PRIMARY KEY" "(game_id, ordinal)"]
+                     ["UNIQUE" "(game_id, move)"]))
 
 (defn teardown
   "use with a jdbc connection"
