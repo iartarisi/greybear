@@ -63,8 +63,9 @@
 
 (deftest new-game-unknown-user-test
   ;; XXX think about raising better errors and at which layer
-  (is (thrown-with-msg? PSQLException #"is not present in table"
-       (new-game 1 2))))
+  (testing "is not present in table exception is thrown"
+    (is (thrown-with-msg? PSQLException #"is not present in table"
+                          (new-game 1 2)))))
 
 (deftest new-game-test
   (create-user "user1" "foo")
