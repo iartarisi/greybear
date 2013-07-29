@@ -78,3 +78,52 @@
             :black_id 2
             :id 1}
            (first (select games))))))
+
+(deftest new-move-first-move
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (new-game 1 2)
+
+  (testing "return value"
+    (is (= {:game_id 1, :ordinal 1, :move "4-5"}
+           (new-move 1 "4-5"))))
+  (testing "new moves is in the database"
+    (is (= [{:game_id 1, :ordinal 1, :move "4-5"}]
+           (select moves)))))
+
+(deftest new-move-correct-ordinals
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (new-game 1 2)
+
+  (new-move 1 "4-5")
+  (new-move 1 "5-6")
+  (new-move 1 "3-6")
+  (testing "new moves have correct ordinals"
+    (is (= [{:ordinal 1} {:ordinal 2} {:ordinal 3}]
+           (select moves (fields :ordinal))))))
+
+(deftest new-move-same-move-in-one-game
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (new-game 1 2)
+
+  (new-move 1 "4-5")
+  (testing "SQL exception is thrown"
+    (is (thrown-with-msg?
+         PSQLException #"duplicate key value violates unique constraint"
+         (new-move 1 "4-5")))))
+
+(deftest new-move-same-ordinal-in-one-game
+  (create-user "user1" "foo")
+  (create-user "user2" "bar")
+  (new-game 1 2)
+
+  (new-move 1 "4-5")
+  (testing "SQL exception is thrown"
+    (is (thrown-with-msg?
+         PSQLException #"duplicate key value violates unique constraint"
+         (insert moves
+                 (values {:move "3-10"
+                          :game_id 1
+                          :ordinal 1}))))))

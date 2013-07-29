@@ -111,3 +111,19 @@
                (values {:stones starting-stones
                         :white_id white
                         :black_id black}))))
+
+(defn new-move
+  "Make a new move in a game"
+  [game position]
+  ;; TODO a subselect with coalesce would've been nicer, but korma
+  ;; doesn't make that easy
+  (let [next-ordinal (+ 1 (or (:max
+                               (first
+                                (select moves
+                                        (where  {:game_id game})
+                                        (aggregate (max :ordinal) :max))))
+                              0))]
+    (insert moves
+            (values {:move position
+                     :game_id game
+                     :ordinal next-ordinal}))))
