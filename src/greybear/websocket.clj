@@ -1,7 +1,9 @@
 (ns greybear.websocket
   (:gen-class)
   (:import [org.webbitserver WebServer WebServers WebSocketHandler]
-           [org.webbitserver.handler StaticFileHandler]))
+           [org.webbitserver.handler StaticFileHandler])
+  (:use [clojure.string :only [split]]
+        [greybear.model :only [new-move]]))
 
 (defn on-open
   [conn]
@@ -9,7 +11,10 @@
 
 (defn on-message
   [conn mess]
-  (println mess))
+  (let [[cmd message] (split mess #": " 2)]
+    (case cmd
+      "new-move" (let [[game move] (split message #"\s")]
+                   (new-move (Integer/parseInt game) move)))))
 
 (defn -main
   [& args]

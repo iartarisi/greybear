@@ -14,9 +14,11 @@
                  [compojure "1.1.5"]
                  [hiccup "1.0.3"]
                  [com.cemerick/friend "0.1.5"]
-                 [sandbar/sandbar "0.4.0-SNAPSHOT"]]
+                 [sandbar/sandbar "0.4.0-SNAPSHOT"]
+                 [expectations "1.4.49"]]
   :plugins [[lein-cljsbuild "0.3.0"]
-            [lein-ring "0.8.3"]]
+            [lein-ring "0.8.3"]
+            [lein-expectations "0.0.7"]]
   :main greybear.websocket
   :ring {:handler greybear.server/app}
   :cljsbuild {:builds

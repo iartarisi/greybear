@@ -16,4 +16,4 @@
 (defn draw-callback
   [x y]
   (.log js/console x y)
-  (.send ws (str x "-" y)))
+  (.send ws (str "new-move: " "1 " x "-" y)))
