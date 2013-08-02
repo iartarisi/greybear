@@ -49,7 +49,8 @@
                                           (fields :id)
                                           (where {:name [like "user2"]}))
                      :stones starting-stones}))
-    (read-game 1) => {:white "user1" :black "user2" :stones starting-stones}))
+    (read-game 1) => {:white "user1" :black "user2"
+                      :stones (map char starting-stones)}))
 
 (facts "about new-game"
   (fact "creating a game between inexistent users throws an error"

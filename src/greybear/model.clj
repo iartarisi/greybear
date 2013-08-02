@@ -78,15 +78,17 @@
   (belongs-to player-b {:fk :black_id}))
 
 (defn read-game [game-id]
-  (first
-   (select games
-           (fields :stones
-                   [:white.name :white]
-                   [:black.name :black])
-           (where {:id game-id})
-           (join [players :white] (= :games.white_id :white.id))
-           (join [players :black] (= :games.black_id :black.id))
-           (limit 1))))
+  "Return a 19x19 lazyseq of chars e.g. [\1 \0 \0 \2 ...]"
+  (-> (select games
+              (fields :stones
+                      [:white.name :white]
+                      [:black.name :black])
+              (where {:id game-id})
+              (join [players :white] (= :games.white_id :white.id))
+              (join [players :black] (= :games.black_id :black.id))
+              (limit 1))
+      first
+      (update-in [:stones] #(map char %))))
 
 (defn verify-user-password
   "Returns a bool if the password matches or not or nil if the user does

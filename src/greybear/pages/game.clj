@@ -5,11 +5,11 @@
         [greybear.pages.errors :only [game-not-found]]))
 
 (defn- stones-to-js
-  "Transforms a string of chars into a JSON array
-  e.g. \"00120\" becomes: [\"0\", \"0\", \"1\", \"2\", \"0\"]
+  "Transforms a list of chars into a JSON array
+  e.g. (\0 \0 \0 \1 \1 \2 \0) becomes: [\"0\", \"0\", \"1\", \"2\", \"0\"]
   "
   [stones]
-  (format "[%s]" (apply str (interpose ", " (map str stones)))))
+  (format "[%s]" (apply str (interpose ", " stones))))
 
 (defn js-draw
   [stones playing last-x last-y]
