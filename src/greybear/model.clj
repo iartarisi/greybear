@@ -1,7 +1,8 @@
 (ns greybear.model
   (:require [clojure.java.jdbc :as jdbc])
   (:use [korma db core]
-        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]))
+        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
+        [greybear.utils :only [place-stone]]))
 
 (def psql {:classname "org.postgresql.Driver"
            :subprotocol "postgresql"
@@ -130,8 +131,18 @@
                                 (select moves
                                         (where  {:game_id game})
                                         (aggregate (max :ordinal) :max))))
-                              0))]
-    (insert moves
-            (values {:move position
-                     :game_id game
-                     :ordinal next-ordinal}))))
+                              0))
+        color (if (odd? next-ordinal) \1 \2)]
+    ;; TODO - rollback
+    ;; figure out why valid? doesn't work for rollbacks
+    (transaction
+     (insert moves
+             (values {:move position
+                      :game_id game
+                      :ordinal next-ordinal}))
+     (update games
+             (set-fields {:stones
+                          (place-stone (:stones (read-game game))
+                                       position
+                                       color)})
+             (where {:id game})))))

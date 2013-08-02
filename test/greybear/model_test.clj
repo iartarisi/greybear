@@ -70,10 +70,11 @@
   (fact "saves a new move in the database"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (let [game_id (new-game 1 2)
-          move "4-5"]
-      (make-move game_id move) => truthy
-      (select moves) => [{:game_id game_id, :ordinal 1, :move move}]))
+    (new-game 1 2)
+    (make-move 1 "1-1") => truthy
+    (select moves) => [{:game_id 1, :ordinal 1, :move "1-1"}]
+    (select games) => [{:black_id 2 :id 1 :white_id 1
+                        :stones "0000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}])
 
   (fact "new moves have correct ordinals"
     (create-user "user1" "foo")

@@ -13,3 +13,12 @@
     (assert (< y 19))
     [x y]))
 
+(defn position-in-vec
+  [[x y]]
+  (+ (* 19 x) y))
+
+(defn place-stone
+  "Place a stone on a board represented by a list of strings"
+  [stones pos color]
+  (apply str (assoc (vec stones)
+               (position-in-vec (position pos)) color)))

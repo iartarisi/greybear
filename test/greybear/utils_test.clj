@@ -1,5 +1,5 @@
 (ns greybear.utils-test
-  (:use [midje.sweet]
+  (:use midje.sweet
         [greybear.utils]))
 
 (fact "parse-int should parse a string into an integer"
@@ -12,3 +12,9 @@
     (position "17-18") => [17 18])
   (fact "should raise an exception on invalid input"
     (position "19-3") => (throws AssertionError)))
+
+(facts "about place-stone"
+  (fact "changes stone at position to black"
+    (place-stone '(\0 \0 \0 \0 \0 \0) "0-2" \1) => "001000")
+  (fact "changes stone at position to white"
+    (place-stone '(\0 \0 \0 \0 \0 \0) "0-2" \2) => "002000"))
