@@ -129,7 +129,7 @@
   (let [next-ordinal (+ 1 (or (:max
                                (first
                                 (select moves
-                                        (where  {:game_id game})
+                                        (where {:game_id game})
                                         (aggregate (max :ordinal) :max))))
                               0))
         color (if (odd? next-ordinal) \1 \2)]
