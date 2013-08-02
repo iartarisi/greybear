@@ -66,22 +66,22 @@
                         :black_id 2
                         :id 1}]))
 
-(facts "about new-move"
+(facts "about make-move"
   (fact "saves a new move in the database"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
     (let [game_id (new-game 1 2)
           move "4-5"]
-      (new-move game_id move) => truthy
+      (make-move game_id move) => truthy
       (select moves) => [{:game_id game_id, :ordinal 1, :move move}]))
 
   (fact "new moves have correct ordinals"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
     (new-game 1 2)
-    (new-move 1 "4-5")
-    (new-move 1 "5-6")
-    (new-move 1 "3-6")
+    (make-move 1 "4-5")
+    (make-move 1 "5-6")
+    (make-move 1 "3-6")
 
     (select moves
             (fields :ordinal)) => [{:ordinal 1} {:ordinal 2} {:ordinal 3}])
@@ -91,15 +91,15 @@
     (create-user "user1" "foo")
     (create-user "user2" "bar")
     (new-game 1 2)
-    (new-move 1 "4-5")
+    (make-move 1 "4-5")
 
-    (new-move 1 "4-5") => (throws PSQLException #"duplicate key value violates unique constraint"))
+    (make-move 1 "4-5") => (throws PSQLException #"duplicate key value violates unique constraint"))
 
   (fact "same ordinal in one game raises exception"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
     (new-game 1 2)
-    (new-move 1 "4-5")
+    (make-move 1 "4-5")
 
     (insert moves
             (values {:move "3-10"

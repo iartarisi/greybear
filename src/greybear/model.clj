@@ -120,7 +120,7 @@
                         :white_id white
                         :black_id black}))))
 
-(defn new-move
+(defn make-move
   "Make a new move in a game"
   [game position]
   ;; TODO a subselect with coalesce would've been nicer, but korma

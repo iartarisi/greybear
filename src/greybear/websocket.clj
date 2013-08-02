@@ -4,7 +4,7 @@
            [org.webbitserver.handler StaticFileHandler])
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
-        [greybear.model :only [new-move]]))
+        [greybear.model :only [make-move]]))
 
 (defn on-open
   [conn]
@@ -18,9 +18,9 @@
   [conn mess]
   (let [[cmd message] (split mess #": " 2)]
     (case cmd
-      "new-move" (do
+      "make-move" (do
                    (let [[game move] (split message #"\s")]
-                     (new-move (parse-int game) move))
+                     (make-move (parse-int game) move))
                    (refresh conn)))))
 
 (defn -main
