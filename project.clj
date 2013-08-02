@@ -15,7 +15,7 @@
                  [hiccup "1.0.3"]
                  [com.cemerick/friend "0.1.5"]
                  [sandbar/sandbar "0.4.0-SNAPSHOT"]
-                 [midje "1.5.1"]]
+                 [midje "1.6-alpha3"]]
   :plugins [[lein-cljsbuild "0.3.0"]
             [lein-ring "0.8.3"]
             [lein-midje "3.0.0"]]
