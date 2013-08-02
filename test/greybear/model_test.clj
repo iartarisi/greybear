@@ -1,130 +1,105 @@
 (ns greybear.model-test
   (:import org.postgresql.util.PSQLException)
   (:require [clojure.java.jdbc :as jdbc])
-  (:use clojure.test
-        korma.core
+  (:use midje.sweet
+        [korma core db]
         greybear.model))
 
-(def test-conn {:classname "org.postgresql.Driver"
-                :subprotocol "postgresql"
-                :subname "//localhost/greybear-test"
-                :user "greybear-test"
-                :password "greybear-test"})
+(def ^:dynamic test-conn {:classname "org.postgresql.Driver"
+                          :subprotocol "postgresql"
+                          :subname "//localhost/greybear-test"
+                          :user "greybear-test"
+                          :password "greybear-test"})
 
-(defn database-fixture [f]
-  (jdbc/with-connection test-conn
-    (try
-      (setup)
-      (f)
-      (finally
-        (teardown)))))
+(namespace-state-changes
+ [(around :facts (jdbc/with-connection test-conn ?form))
+  (before :facts (jdbc/with-connection test-conn (setup)))
+  (after :facts (jdbc/with-connection test-conn (teardown)))])
 
-(use-fixtures :each database-fixture)
+(facts "about create-user"
+  (fact "creates a new player in the database"
+    (create-user "foo" "bar") => truthy
+    (select players (fields :name)) => [{:name "foo"}])
 
+  (fact "doesn't raise an error if the user already exists"
+    (create-user "foo" "bar") => truthy
+    (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))
 
-(deftest user-create
-  (create-user "foo" "bar")
-  (is (= (select players
-                 (fields :name)
-                 (limit 1))
-         [{:name "foo"}])))
+(facts "about verify-user-password"
+  (fact "valid password"
+    (create-user "foo" "bar")
+    (verify-user-password "foo" "bar") => true)
 
-(deftest user-create-already-exists
-  (create-user "foo" "bar")
-  (is (nil? (create-user "foo" "bar")))
-  (is (= {:cnt 1}
-         (first (select players
-                        (aggregate (count :*) :cnt))))))
+  (fact "returns false when wrong password is given"
+    (create-user "foo" "bar")
+    (verify-user-password "foo" "qux") => false)
 
-(deftest verify-user-password-test
-  (create-user "foo" "bar")
-  (is (true? (verify-user-password "foo" "bar"))))
+  (fact "returns nil when the given user doesn't exist"
+    (verify-user-password "bogus" "qux") => nil))
 
-(deftest verify-user-password-no-user
-  (is (nil? (verify-user-password "foo" "bar"))))
-
-(deftest verify-user-password-wrong-password
-  (create-user "foo" "bar")
-  (is (false? (verify-user-password "foo" "qux"))))
-
-(deftest read-game-test
+(facts "about read-game"
   (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (insert games
-          (values {:white_id (subselect players
-                                        (fields :id)
-                                        (where {:name [like "user1"]}))
-                   :black_id (subselect players
-                                        (fields :id)
-                                        (where {:name [like "user2"]}))
-                   :stones starting-stones}))
-  (is (= {:white "user1" :black "user2" :stones starting-stones}
-         (read-game 1))))
+  (create-user "user2" "foo")
+  (fact "reads a game initialized to an empty board"
+    (insert games
+            (values {:white_id (subselect players
+                                          (fields :id)
+                                          (where {:name [like "user1"]}))
+                     :black_id (subselect players
+                                          (fields :id)
+                                          (where {:name [like "user2"]}))
+                     :stones starting-stones}))
+    (read-game 1) => {:white "user1" :black "user2" :stones starting-stones}))
 
-(deftest new-game-unknown-user-test
-  ;; XXX think about raising better errors and at which layer
-  (testing "is not present in table exception is thrown"
-    (is (thrown-with-msg? PSQLException #"is not present in table"
-                          (new-game 1 2)))))
+(facts "about new-game"
+  (fact "creating a game between inexistent users throws an error"
+    ;; XXX think about raising better errors and at which layer
+    (new-game 1 2) => (throws PSQLException))
 
-(deftest new-game-test
-  (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (testing "return value"
-    (is (= 1
-           (new-game 1 2))))
-  (testing "new game is in the database"
-    (is (= {:stones starting-stones
-            :white_id 1
-            :black_id 2
-            :id 1}
-           (first (select games))))))
+  (fact "saves new game to the database"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2) => 1
+    (select games) => [{:stones starting-stones
+                        :white_id 1
+                        :black_id 2
+                        :id 1}]))
 
-(deftest new-move-first-move
-  (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (new-game 1 2)
+(facts "about new-move"
+  (fact "saves a new move in the database"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (new-move 1 "4-5") => truthy
+    (select moves) => [{:game_id 1, :ordinal 1, :move "4-5"}])
 
-  (testing "return value"
-    (is (= {:game_id 1, :ordinal 1, :move "4-5"}
-           (new-move 1 "4-5"))))
-  (testing "new moves is in the database"
-    (is (= [{:game_id 1, :ordinal 1, :move "4-5"}]
-           (select moves)))))
+  (fact "new moves have correct ordinals"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (new-move 1 "4-5")
+    (new-move 1 "5-6")
+    (new-move 1 "3-6")
 
-(deftest new-move-correct-ordinals
-  (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (new-game 1 2)
+    (select moves
+            (fields :ordinal)) => [{:ordinal 1} {:ordinal 2} {:ordinal 3}])
 
-  (new-move 1 "4-5")
-  (new-move 1 "5-6")
-  (new-move 1 "3-6")
-  (testing "new moves have correct ordinals"
-    (is (= [{:ordinal 1} {:ordinal 2} {:ordinal 3}]
-           (select moves (fields :ordinal))))))
+  ;; TODO - raise better exceptions here and bellow
+  (fact "same move in one game should raise exception"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (new-move 1 "4-5")
 
-(deftest new-move-same-move-in-one-game
-  (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (new-game 1 2)
+    (new-move 1 "4-5") => (throws PSQLException #"duplicate key value violates unique constraint"))
 
-  (new-move 1 "4-5")
-  (testing "SQL exception is thrown"
-    (is (thrown-with-msg?
-         PSQLException #"duplicate key value violates unique constraint"
-         (new-move 1 "4-5")))))
+  (fact "same ordinal in one game raises exception"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (new-move 1 "4-5")
 
-(deftest new-move-same-ordinal-in-one-game
-  (create-user "user1" "foo")
-  (create-user "user2" "bar")
-  (new-game 1 2)
-
-  (new-move 1 "4-5")
-  (testing "SQL exception is thrown"
-    (is (thrown-with-msg?
-         PSQLException #"duplicate key value violates unique constraint"
-         (insert moves
-                 (values {:move "3-10"
-                          :game_id 1
-                          :ordinal 1}))))))
+    (insert moves
+            (values {:move "3-10"
+                     :game_id 1
+                     :ordinal 1})) => (throws PSQLException #"duplicate key value violates unique constraint")))

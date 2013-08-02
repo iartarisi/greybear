@@ -7,7 +7,7 @@
                  [org.clojure/clojurescript "0.0-1586"]
                  [korma "0.3.0-RC5"]
                  [org.postgresql/postgresql "9.2-1002-jdbc4"]
-                 [org.clojure/java.jdbc "0.3.0-alpha1"]
+                 [org.clojure/java.jdbc "0.3.0-alpha4"]
                  [org.webbitserver/webbit "0.4.14"]
                  [ring/ring-core "1.2.0"]
                  [ring/ring-jetty-adapter "1.1.8"]

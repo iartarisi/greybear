@@ -12,30 +12,36 @@
 (defn setup
   "use with a jdbc connection"
   []
-  (jdbc/create-table :players
-                     [:id :serial "primary key"]
-                     [:name "varchar" :unique]
-                     [:password "varchar"])
+  (try
+    (jdbc/create-table :players
+                       [:id :serial "primary key"]
+                       [:name "varchar" :unique]
+                       [:password "varchar"])
 
-  (jdbc/create-table :games
-                     [:id :serial "primary key"]
-                     [:white_id :serial "references players (id)"]
-                     [:black_id :serial "references players (id)"]
-                     [:stones "varchar"])
+    (jdbc/create-table :games
+                       [:id :serial "primary key"]
+                       [:white_id :serial "references players (id)"]
+                       [:black_id :serial "references players (id)"]
+                       [:stones "varchar"])
 
-  (jdbc/create-table :moves
-                     [:move "varchar"]
-                     [:ordinal "smallint"]
-                     [:game_id :serial "references games (id)"]
-                     ["PRIMARY KEY" "(game_id, ordinal)"]
-                     ["UNIQUE" "(game_id, move)"]))
+    (jdbc/create-table :moves
+                       [:move "varchar"]
+                       [:ordinal "smallint"]
+                       [:game_id :serial "references games (id)"]
+                       ["PRIMARY KEY" "(game_id, ordinal)"]
+                       ["UNIQUE" "(game_id, move)"])
+    (catch Exception e
+      (.getNextException e))))
 
 (defn teardown
   "use with a jdbc connection"
   []
-  (jdbc/drop-table :moves)
-  (jdbc/drop-table :games)
-  (jdbc/drop-table :players))
+  (try
+    (jdbc/drop-table :moves)
+    (jdbc/drop-table :games)
+    (jdbc/drop-table :players)
+    (catch Exception e
+      (.getNextException e))))
 
 (defdb korma-db psql)
 
