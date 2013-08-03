@@ -15,7 +15,7 @@
 
 (defn position-in-vec
   [[x y]]
-  (+ (* 19 x) y))
+  (+ x (* 19 y)))
 
 (defn place-stone
   "Place a stone on a board represented by a list of strings"
