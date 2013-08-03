@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-1586"]
+                 [org.clojure/data.json "0.2.2"]
                  [korma "0.3.0-RC5"]
                  [org.postgresql/postgresql "9.2-1002-jdbc4"]
                  [org.clojure/java.jdbc "0.3.0-alpha4"]

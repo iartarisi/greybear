@@ -7,7 +7,8 @@
   (html5
    [:head
     [:title (str "Grey Bear - " subtitle)]
-    (include-css "/bootstrap/css/bootstrap.css")]
+    (include-css "/bootstrap/css/bootstrap.css")
+    (include-js "https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js")]
    [:body
     [:div.navbar
      [:div.navbar-inner
