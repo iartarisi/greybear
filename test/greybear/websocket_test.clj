@@ -7,4 +7,4 @@
  (on-message nil "make-move: 142 1-3") => nil
  (provided
   (make-move 142 "1-3") => anything
-  (refresh anything) => nil))
+  (refresh anything anything) => nil))
