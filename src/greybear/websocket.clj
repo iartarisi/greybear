@@ -45,5 +45,6 @@
     (.add "/websocket"
           (proxy [WebSocketHandler] []
             (onOpen [conn] (on-open conn))
+            (onClose [conn] nil)
             (onMessage [conn mess] (on-message conn mess))))
     (.start)))
