@@ -18,6 +18,6 @@
                       [:div.span2
                        [:div#players
                         "Players: " (game :white) " vs. " (game :black)]]]]
-                    (include-js "/js/greybear.js"
+                    (include-js "/js/goboard.js"
                                 "/js/game.js"))}
       (game-not-found game-id))))

@@ -18,9 +18,9 @@ ws.onmessage = function(message) {
     console.log(data["stones"]);
     switch (cmd) {
         case "board":
-          goboard.draw("goBoard", angular.fromJson(data["stones"]),
-                       data["playing"], draw_callback,
-                       data["last-x"], data["last-y"]);
+          go_board("goBoard", angular.fromJson(data["stones"]),
+                   data["playing"], draw_callback,
+                   data["last-x"], data["last-y"]);
         default:
           console.log("Got command: " + cmd);
     }
