@@ -15,6 +15,10 @@
 
 (facts "about place-stone"
   (fact "changes stone at position to black"
-    (place-stone '(\0 \0 \0 \0 \0 \0) "0-2" \1) => "001000")
+    (place-stone '(\0 \0 \0 \0 \0 \1) "2-0" \1) => "001001")
   (fact "changes stone at position to white"
-    (place-stone '(\0 \0 \0 \0 \0 \0) "0-2" \2) => "002000"))
+    (place-stone '(\0 \0 \0 \0 \0 \1) "2-0" \2) => "002001")
+  (fact "changes stone at position calculating 19x1 + 2"
+    (place-stone '(\0 \0 \1 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0 \0
+                   \0 \0 \0 \0)
+                 "2-1" \2) => "00100000000000000000020"))
