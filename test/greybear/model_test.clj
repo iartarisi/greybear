@@ -25,18 +25,6 @@
     (create-user "foo" "bar") => truthy
     (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))
 
-(facts "about verify-user-password"
-  (fact "valid password"
-    (create-user "foo" "bar")
-    (verify-user-password "foo" "bar") => true)
-
-  (fact "returns false when wrong password is given"
-    (create-user "foo" "bar")
-    (verify-user-password "foo" "qux") => false)
-
-  (fact "returns nil when the given user doesn't exist"
-    (verify-user-password "bogus" "qux") => nil))
-
 (facts "about read-game"
   (create-user "user1" "foo")
   (create-user "user2" "foo")
