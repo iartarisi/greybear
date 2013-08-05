@@ -14,8 +14,8 @@
         [greybear.pages game login]))
 
 (defroutes main-routes
-  (GET ["/games/:id", :id #"[0-9]+"] [id :as {session :session}]
-       (game session (Integer. id)))
+  (GET ["/games/:id", :id #"[0-9]+"] [id]
+       (game request (Integer. id)))
   (GET "/login" request (login-get))
   (GET "/logout" request
        (friend/logout* (resp/redirect (str (:context request) "/"))))
@@ -31,6 +31,7 @@
   [user]
   (first (select players
                  (fields [:name :username]
+                         [:id :user-id]
                          :password)
                  (where {:name user}))))
 
