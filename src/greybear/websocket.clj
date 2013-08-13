@@ -20,7 +20,7 @@
 
 (defn refresh
   [conn message]
-  (let [game-id (parse-int message)
+  (let [game-id (:game_id message)
         game (read-game game-id)
         {:keys [player x y] :or {player 0 x nil y nil}} (last-move game-id)]
     (.send conn
@@ -32,12 +32,13 @@
 
 (defn on-message
   [conn mess]
-  (let [[cmd message] (split mess #": " 2)]
-    (case cmd
+  (let [message (json/read-json mess)]
+    (case (:cmd message)
       "init-game" (refresh conn message)
-      "make-move" (let [[game move] (split message #"\s")]
-                    (make-move (parse-int game) move)
-                    (refresh conn game))
+      "make-move" (do
+                    (make-move (:game_id message)
+                               (str (:x message) "-" (:y message)))
+                    (refresh conn message))
       (.send conn (str "{\"cmd\": \"YO! " message "\"}")))))
 
 (defn -main

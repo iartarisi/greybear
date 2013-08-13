@@ -4,7 +4,12 @@
         [greybear.model :only [make-move]]))
 
 (fact "on-message make-move makes a new move and calls refresh"
- (on-message nil "make-move: 142 1-3") => nil
- (provided
-  (make-move 142 "1-3") => anything
-  (refresh anything anything) => nil))
+  (let [message "{\"cmd\": \"make-move\", \"game_id\": 142, \"user_id\": 3, \"x\": 1, \"y\": 3}"]
+    (on-message nil message) => nil
+    (provided
+      (make-move 142 "1-3") => anything
+      (refresh nil {:cmd "make-move"
+                    :game_id 142
+                    :user_id 3
+                    :x 1
+                    :y 3}) => nil)))
