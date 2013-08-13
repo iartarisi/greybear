@@ -7,8 +7,10 @@
 
 (defn game [request game-id]
   (let [game (read-game game-id)
-        user-id (:user_id
-                 (friend/current-authentication (friend/identity request)))]
+        user-id (or (:user-id
+                     (friend/current-authentication
+                      (friend/identity request)))
+                    0)]
     (if game
       {:body
        (base-layout (str "Game #" game-id)
