@@ -15,12 +15,13 @@ var board = {
     "stone-radius": 11  // space * 2/5
 };
 
-function go_board(element_id, stones, playing, make_move, last_move) {
+function go_board(element_id, stones, playing, make_move, last_x, last_y) {
     board["canvas"] = document.getElementById(element_id);
     board["context"] = document.getElementById(element_id).getContext("2d");
     board["stones"] = stones;
     board["playing"] = playing;
-    board["last-move"] = last_move;
+    board["last-x"] = last_x;
+    board["last-y"] = last_y;
     window.make_move = make_move;
     make_board();
 };
@@ -111,7 +112,7 @@ function draw_dots() {
 };
 
 function draw_stone(color, x, y) {
-    if (color == 1) {
+    if (color == 2) {
         var fill_color = "black";
     } else {
         var fill_color = "white";
@@ -126,7 +127,7 @@ function draw_shadow() {
 };
 
 function draw_last_move() {
-    draw_circle(board["last-move"][0], board["last-move"][1],
+    draw_circle(board["last-x"], board["last-y"],
                 DOT, LASTMOVE, LASTMOVE);
 };
 
@@ -143,7 +144,7 @@ function draw_board() {
                        i % board["lines"], Math.floor(i/board["lines"]));
         }
     }
-    if (board["last-move"]) {
+    if (board["last-x"]) {
         draw_last_move();
     }
     if (shadow) {

@@ -5,7 +5,7 @@
   (:require [clojure.data.json :as json])
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
-        [greybear.model :only [make-move read-game]]))
+        [greybear.model :only [make-move last-move read-game]]))
 
 (defn- stones-to-js
   "Transforms a list of chars into a JSON array
@@ -21,13 +21,14 @@
 (defn refresh
   [conn message]
   (let [game-id (parse-int message)
-        game (read-game game-id)]
+        game (read-game game-id)
+        {:keys [player x y] :or {player 0 x nil y nil}} (last-move game-id)]
     (.send conn
            (json/write-str {:cmd "board"
                             :stones (stones-to-js (game :stones))
-                            :playing 1
-                            :last-x 18
-                            :last-y 17}))))
+                            :playing (+ 1 player)
+                            :last-x x
+                            :last-y y}))))
 
 (defn on-message
   [conn mess]
