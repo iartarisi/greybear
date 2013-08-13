@@ -9,7 +9,7 @@ ws.onopen = function() {
 
 function draw_callback(x, y) {
     console.log(x, y);
-    ws.send("make-move: "+ game_id + " " + x + "-" + y);
+    ws.send("make-move: " + game_id + " " + x + "-" + y);
 }
 
 ws.onmessage = function(message) {
