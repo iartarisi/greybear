@@ -96,6 +96,12 @@
                      :ordinal 1})) => (throws PSQLException #"duplicate key value violates unique constraint")))
 
 (facts "about last-move"
+  (fact "returns nil values when there is no last move"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+
+    (last-move 1) => nil)
   (fact "returns last move"
     (create-user "user1" "foo")
     (create-user "user2" "bar")

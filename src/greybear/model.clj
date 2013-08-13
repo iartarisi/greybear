@@ -98,10 +98,11 @@
                             (where {:game_id game-id})
                             (order :ordinal :DESC)
                             (limit 1)))]
-    (let [[x y] (map parse-int (split (:move move) #"-"))]
-      {:player (mod (:ordinal move) 2)
-       :x x
-       :y y})))
+    (when move
+      (let [[x y] (map parse-int (split (:move move) #"-"))]
+        {:player (mod (:ordinal move) 2)
+         :x x
+         :y y}))))
 
 (defn create-user
   [username password]
