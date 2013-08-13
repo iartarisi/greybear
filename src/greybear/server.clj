@@ -14,7 +14,7 @@
         [greybear.pages game login]))
 
 (defroutes main-routes
-  (GET ["/games/:id", :id #"[0-9]+"] [id]
+  (GET ["/games/:id", :id #"[0-9]+"] [id :as request]
        (game request (Integer. id)))
   (GET "/login" request (login-get))
   (GET "/logout" request
