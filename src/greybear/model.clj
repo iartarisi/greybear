@@ -1,8 +1,9 @@
 (ns greybear.model
   (:require [clojure.java.jdbc :as jdbc])
-  (:use [korma db core]
+  (:use [clojure.string :only [split]]
+        [korma db core]
         [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
-        [greybear.utils :only [place-stone]]))
+        [greybear.utils :only [place-stone parse-int]]))
 
 (def psql {:classname "org.postgresql.Driver"
            :subprotocol "postgresql"
@@ -90,6 +91,17 @@
               (limit 1))
       first
       (update-in [:stones] #(map char %))))
+
+(defn last-move [game-id]
+  "Return a map like {:player 1 :move \"4-5\"}, player 1 is black, 0 is white"
+  (let [move (first (select moves
+                            (where {:game_id game-id})
+                            (order :ordinal :DESC)
+                            (limit 1)))]
+    (let [[x y] (map parse-int (split (:move move) #"-"))]
+      {:player (mod (:ordinal move) 2)
+       :x x
+       :y y})))
 
 (defn create-user
   [username password]

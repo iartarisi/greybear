@@ -94,3 +94,14 @@
             (values {:move "3-10"
                      :game_id 1
                      :ordinal 1})) => (throws PSQLException #"duplicate key value violates unique constraint")))
+
+(facts "about last-move"
+  (fact "returns last move"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (make-move 1 "4-5")
+    (make-move 1 "5-6")
+    (make-move 1 "14-3")
+
+    (last-move 1) => {:player 1 :x 14 :y 3})) 
