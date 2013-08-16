@@ -18,6 +18,20 @@
   [conn]
   (.send conn "{\"cmd\": \"caca\"}"))
 
+
+(defn get-playing
+  "Returns who is playing the next move:
+   -1 - it is not the current user's turn
+    0 - it is the user's turn and she plays white
+    1 - it is the user's turn and she plays black"
+  [color user-id game]
+  (if (and (not= 0 user-id)
+           (case color
+             1 (= user-id (:black_id game))
+             0 (= user-id (:white_id game))))
+    color
+    -1))
+
 (defn refresh
   [conn message]
   (let [game-id (:game_id message)
