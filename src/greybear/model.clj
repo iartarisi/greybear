@@ -121,7 +121,7 @@
 
 (defn new-game
   "Start a new game between two players, returns the new game's id"
-  [white black]
+  [black white]
   (:id (insert games
                (values {:stones starting-stones
                         :white_id white

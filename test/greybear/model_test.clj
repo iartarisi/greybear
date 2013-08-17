@@ -37,7 +37,7 @@
                                           (fields :id)
                                           (where {:name [like "user2"]}))
                      :stones starting-stones}))
-    (read-game 1) => {:white "user1" :black "user2"
+    (read-game 1) => {:white "user1" :black "user2" :black_id 2 :white_id 1
                       :stones (map char starting-stones)}))
 
 (facts "about new-game"
@@ -50,8 +50,8 @@
     (create-user "user2" "bar")
     (new-game 1 2) => 1
     (select games) => [{:stones starting-stones
-                        :white_id 1
-                        :black_id 2
+                        :white_id 2
+                        :black_id 1
                         :id 1}]))
 
 (facts "about make-move"
@@ -61,7 +61,7 @@
     (new-game 1 2)
     (make-move 1 "1-1") => truthy
     (select moves) => [{:game_id 1, :ordinal 1, :move "1-1"}]
-    (select games) => [{:black_id 2 :id 1 :white_id 1
+    (select games) => [{:black_id 1 :id 1 :white_id 2
                         :stones "0000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}])
 
   (fact "new moves have correct ordinals"
