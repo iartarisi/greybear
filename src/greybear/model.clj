@@ -95,7 +95,7 @@
       (update-in [:stones] #(map char %))))
 
 (defn last-move [game-id]
-  "Return a map like {:player 1 :move \"4-5\"}, player 1 is black, 2 is white"
+  "Return a map like {:player 1 :x 4 :y 5}, player 1 is black, 2 is white"
   (let [move (first (select moves
                             (where {:game_id game-id})
                             (order :ordinal :DESC)
