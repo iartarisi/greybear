@@ -42,11 +42,13 @@
   (let [game-id (:game_id message)
         user-id (:user_id message)
         game (read-game game-id)
-        {:keys [player x y] :or {player 1 x nil y nil}} (last-move game-id)]
+        {:keys [last-player x y]
+         :or {last-player 1 x nil y nil}}
+        (last-move game-id)]
     (.send conn
            (json/write-str {:cmd "board"
                             :stones (stones-to-js (game :stones))
-                            :playing (get-playing player user-id game)
+                            :playing (get-playing last-player user-id game)
                             :last-x x
                             :last-y y}))))
 
