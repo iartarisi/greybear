@@ -110,4 +110,4 @@
     (make-move 1 "5-6")
     (make-move 1 "14-3")
 
-    (last-move 1) => {:player 1 :x 14 :y 3})) 
+    (last-move 1) => {:player 2 :x 14 :y 3})) 

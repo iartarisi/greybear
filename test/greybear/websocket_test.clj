@@ -20,18 +20,18 @@
 
 (facts "about get-playing"
   (fact "returns 0 when user is anonymous"
-    (get-playing ...color... 0 ...game...) => -1)
+    (get-playing ...color... 0 ...game...) => 0)
 
   (fact "returns matching color when user is not anonymous"
     (let [game {:black_id 111
                 :white_id 222}]
       (get-playing 1 111 game) => 1
-      (get-playing 0 222 game) => 0))
+      (get-playing 2 222 game) => 2))
   (fact "returns 0 when user is not anonymous, but it's not her turn"
     (let [game {:black_id 111
                 :white_id 222}]
-      (get-playing 1 222 game) => -1
-      (get-playing 0 111 game) => -1
-      (get-playing 0 1 game) => -1)))
+      (get-playing 1 222 game) => 0
+      (get-playing 2 111 game) => 0
+      (get-playing 2 1 game) => 0)))
 
 

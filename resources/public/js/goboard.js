@@ -112,7 +112,11 @@ function draw_dots() {
 };
 
 function draw_stone(color, x, y) {
-    if (color == 2) {
+    if (color == 0) {
+        return;
+    }
+
+    if (color == 1) {
         var fill_color = "black";
     } else {
         var fill_color = "white";

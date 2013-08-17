@@ -84,7 +84,9 @@
   (-> (select games
               (fields :stones
                       [:white.name :white]
-                      [:black.name :black])
+                      [:black.name :black]
+                      [:white.id :white_id]
+                      [:black.id :black_id])
               (where {:id game-id})
               (join [players :white] (= :games.white_id :white.id))
               (join [players :black] (= :games.black_id :black.id))
@@ -93,14 +95,16 @@
       (update-in [:stones] #(map char %))))
 
 (defn last-move [game-id]
-  "Return a map like {:player 1 :move \"4-5\"}, player 1 is black, 0 is white"
+  "Return a map like {:player 1 :move \"4-5\"}, player 1 is black, 2 is white"
   (let [move (first (select moves
                             (where {:game_id game-id})
                             (order :ordinal :DESC)
                             (limit 1)))]
     (when move
       (let [[x y] (map parse-int (split (:move move) #"-"))]
-        {:player (mod (:ordinal move) 2)
+        {:player (if (= 0 (mod (:ordinal move) 2))
+                   1
+                   2)
          :x x
          :y y}))))
 
