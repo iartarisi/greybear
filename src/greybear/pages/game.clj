@@ -13,7 +13,7 @@
                     0)]
     (if game
       {:body
-       (base-layout (str "Game #" game-id)
+       (base-layout (str "Game #" game-id) request
                     [:div.container-fluid
                      [:div#game-area.row-fluid
                       [:div.span10 [:canvas#goBoard]]

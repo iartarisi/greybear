@@ -1,22 +1,25 @@
 (ns greybear.pages.layout
+  (:require [cemerick.friend :as friend])
   (:use [hiccup page element]
         (sandbar stateful-session)))
 
 (defn base-layout
-  [subtitle & content]
+  [subtitle request & content]
   (html5
    [:head
     [:title (str "Grey Bear - " subtitle)]
     (include-css "/bootstrap/css/bootstrap.css")
     (include-js "https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js")]
    [:body
-    [:div.navbar
-     [:div.navbar-inner
-      [:a.brand {:href "/"} "Greybear"]
-      [:div#user-links
-       [:ul.nav
-        (let [username (session-get :username false)]
-          (if username
-            [:li [:a {:href (str "/users/" username)} username]]
-            [:li [:a {:href "/login"} "Login"]]))]]]]
-    [:div#content content]]))
+    [:div#content.container-fluid
+     [:div.navbar
+      [:div.navbar-inner
+       [:a.brand {:href "/"} "Greybear"]
+       [:div#user-links
+        [:ul.nav.pull-right
+         [:li
+          (if-let [username (:username (friend/current-authentication
+                                        (friend/identity request)))]
+            [:a {:href "/logout"} "Logout"]
+            [:a {:href "/login"} "Login"])]]]]]
+     content]]))

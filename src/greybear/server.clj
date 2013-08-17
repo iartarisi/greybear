@@ -16,7 +16,7 @@
 (defroutes main-routes
   (GET ["/games/:id", :id #"[0-9]+"] [id :as request]
        (game request (Integer. id)))
-  (GET "/login" request (login-get))
+  (GET "/login" request (login-get request))
   (GET "/logout" request
        (friend/logout* (resp/redirect (str (:context request) "/"))))
   (GET "/requires-authentication" request
