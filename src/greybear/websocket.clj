@@ -19,6 +19,10 @@
   (.send conn "{\"cmd\": \"caca\"}"))
 
 
+(defn- opponent
+  "Return the opponent of a player i.e. 2 for 1 and 1 for 2"
+  [player] (if (= player 1) 2 1))
+
 (defn get-playing
   "Returns who is playing the next move:
     0 - it is not the current user's turn
@@ -29,7 +33,8 @@
            (case color
              1 (= user-id (:black_id game))
              2 (= user-id (:white_id game))))
-    color
+    ;; color represents the last move, but we want to draw the next move
+    (opponent color)
     0))
 
 (defn refresh

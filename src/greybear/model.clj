@@ -103,8 +103,8 @@
     (when move
       (let [[x y] (map parse-int (split (:move move) #"-"))]
         {:player (if (= 0 (mod (:ordinal move) 2))
-                   1
-                   2)
+                   2
+                   1)
          :x x
          :y y}))))
 
