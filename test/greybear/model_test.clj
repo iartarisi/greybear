@@ -26,9 +26,9 @@
     (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))
 
 (facts "about read-game"
-  (create-user "user1" "foo")
-  (create-user "user2" "foo")
   (fact "reads a game initialized to an empty board"
+    (create-user "user1" "foo")
+    (create-user "user2" "foo")
     (insert games
             (values {:white_id (subselect players
                                           (fields :id)
