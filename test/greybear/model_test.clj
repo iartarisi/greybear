@@ -26,6 +26,8 @@
     (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))
 
 (facts "about read-game"
+  (fact "returns nil when a game could not be found"
+    (read-game 1) => nil)
   (fact "reads a game initialized to an empty board"
     (create-user "user1" "foo")
     (create-user "user2" "foo")

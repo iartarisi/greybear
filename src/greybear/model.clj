@@ -81,18 +81,18 @@
 
 (defn read-game [game-id]
   "Return a 19x19 lazyseq of chars e.g. [\1 \0 \0 \2 ...]"
-  (-> (select games
-              (fields :stones
-                      [:white.name :white]
-                      [:black.name :black]
-                      [:white.id :white_id]
-                      [:black.id :black_id])
-              (where {:id game-id})
-              (join [players :white] (= :games.white_id :white.id))
-              (join [players :black] (= :games.black_id :black.id))
-              (limit 1))
-      first
-      (update-in [:stones] #(map char %))))
+  (let [game (first (select games
+                            (fields :stones
+                                    [:white.name :white]
+                                    [:black.name :black]
+                                    [:white.id :white_id]
+                                    [:black.id :black_id])
+                            (where {:id game-id})
+                            (join [players :white] (= :games.white_id :white.id))
+                            (join [players :black] (= :games.black_id :black.id))
+                            (limit 1)))]
+    (when (:stones game)
+      (update-in game [:stones] #(map char %)))))
 
 (defn last-move [game-id]
   "Return a map like {:player 1 :x 4 :y 5}, player 1 is black, 2 is white"
