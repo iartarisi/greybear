@@ -14,13 +14,12 @@
     (if game
       {:body
        (base-layout (str "Game #" game-id) request
-                    [:div.container-fluid
-                     [:div#game-area.row-fluid
-                      [:div.span10 [:canvas#goBoard]]
-                      [:div.span2
-                       [:div#players
-                        "Players: " (game :white) " vs. " (game :black)
-                        user-id]]]]
+                    [:div#game-area.row-fluid
+                     [:div.span10 [:canvas#goBoard]]
+                     [:div.span2
+                      [:div#players
+                       "Players: " (game :white) " vs. " (game :black)
+                       user-id]]]
                     (include-js "/js/goboard.js"
                                 "/js/game.js")
                     (javascript-tag
