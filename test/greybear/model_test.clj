@@ -113,3 +113,17 @@
     (make-move 1 "14-3")
 
     (last-move 1) => {:player 1 :x 14 :y 3})) 
+
+(facts "about games"
+  (fact "returns a list of games with the right contents"
+    (create-user "user1" "foo")
+    (create-user "user2" "bar")
+    (new-game 1 2)
+    (new-game 2 1)
+    (make-move 1 "4-5")
+    (make-move 1 "5-6")
+    (make-move 1 "14-3")
+    (make-move 2 "14-3")
+
+    (games-list) => [{:id 1 :black_id 1 :white_id 2 :moves 3}
+                     {:id 2 :black_id 2 :white_id 1 :moves 1}]))

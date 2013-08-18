@@ -152,3 +152,12 @@
                                        position
                                        color)})
              (where {:id game})))))
+
+(defn games-list
+  "Return a list of games hashes"
+  []
+  (select games
+          (fields :games.id :games.black_id :games.white_id)
+          (join moves)
+          (aggregate (count :moves.ordinal) :moves :games.id)
+          (order :games.id :ASC)))
