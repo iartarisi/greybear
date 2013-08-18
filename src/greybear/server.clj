@@ -11,9 +11,10 @@
         [compojure.core :only [defroutes GET POST]]
         [ring.util.response :as resp]
         [greybear.model :only [players]]
-        [greybear.pages game login]))
+        [greybear.pages games game login]))
 
 (defroutes main-routes
+  (GET "/games" request (games request))
   (GET ["/games/:id", :id #"[0-9]+"] [id :as request]
        (game request (Integer. id)))
   (GET "/login" request (login-get request))
