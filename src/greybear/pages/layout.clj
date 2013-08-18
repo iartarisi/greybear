@@ -9,6 +9,7 @@
    [:head
     [:title (str "Grey Bear - " subtitle)]
     (include-css "/bootstrap/css/bootstrap.css")
+    (include-css "/style.css")
     (include-js "https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js")]
    [:body
     [:div#content.container-fluid
