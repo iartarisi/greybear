@@ -24,7 +24,7 @@
        (friend/authenticated "Thanks for authenticating!"))
   ;; (GET "/role-user" request
   ;;      (friend/authorize #{::users/user} "You're a user"))
-  (GET "/" request (html5 request))
+  (GET "/" request (resp/redirect "/games"))
   (route/resources "/")
   (route/not-found "Page not found"))
 
