@@ -1,7 +1,7 @@
 (ns greybear.websocket-test
   (:use [midje.sweet]
         [greybear.websocket :only [on-message refresh get-playing]]
-        [greybear.model :only [make-move]]))
+        [greybear.model :only [BLACK WHITE make-move]]))
 
 (fact "on-message make-move makes a new move and calls refresh"
   (let [message (str "{\"cmd\": \"make-move\", "
@@ -25,8 +25,8 @@
   (fact "returns matching color when user is not anonymous"
     (let [game {:black_id 111
                 :white_id 222}]
-      (get-playing 1 111 game) => 2
-      (get-playing 2 222 game) => 1))
+      (get-playing BLACK 111 game) => WHITE
+      (get-playing WHITE 222 game) => BLACK))
 
   (fact "returns 0 when user is not anonymous, but it's not her turn"
     (let [game {:black_id 111

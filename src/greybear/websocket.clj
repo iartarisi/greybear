@@ -5,7 +5,7 @@
   (:require [clojure.data.json :as json])
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
-        [greybear.model :only [make-move last-move read-game]]))
+        [greybear.model :only [BLACK WHITE make-move last-move read-game]]))
 
 (defn- stones-to-js
   "Transforms a list of chars into a JSON array
@@ -20,8 +20,8 @@
 
 
 (defn- opponent
-  "Return the opponent of a player i.e. 2 for 1 and 1 for 2"
-  [player] (if (= player 1) 2 1))
+  "Return the opponent of a player i.e. WHITE for BLACK, BLACK for WHITE"
+  [player] (if (= player BLACK) WHITE BLACK))
 
 (defn get-playing
   "Returns who is playing the next move:

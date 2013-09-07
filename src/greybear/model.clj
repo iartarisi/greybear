@@ -5,6 +5,12 @@
         [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
         [greybear.utils :only [place-stone parse-int]]))
 
+(def ^:const BLACK 1)
+(def ^:const WHITE 2)
+(def ^:const starting-stones
+  (apply str (repeat (* 19 19) "0")))
+
+
 (def psql {:classname "org.postgresql.Driver"
            :subprotocol "postgresql"
            :subname "//localhost/greybear"
@@ -95,7 +101,8 @@
       (update-in game [:stones] #(map char %)))))
 
 (defn last-move [game-id]
-  "Return a map like {:player 1 :x 4 :y 5}, player 1 is black, 2 is white"
+  "Return a map like {:player BLACK :x 4 :y 5}
+  Returns nil when there is no last move"
   (let [move (first (select moves
                             (where {:game_id game-id})
                             (order :ordinal :DESC)
@@ -103,8 +110,8 @@
     (when move
       (let [[x y] (map parse-int (split (:move move) #"-"))]
         {:player (if (= 0 (mod (:ordinal move) 2))
-                   2
-                   1)
+                   WHITE
+                   BLACK)
          :x x
          :y y}))))
 
@@ -115,9 +122,6 @@
             (values {:name username :password (hash-bcrypt password)}))
     (catch org.postgresql.util.PSQLException e
       nil)))
-
-(def ^:const starting-stones
-  (apply str (repeat (* 19 19) "0")))
 
 (defn new-game
   "Start a new game between two players, returns the new game's id"
