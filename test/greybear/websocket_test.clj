@@ -27,6 +27,7 @@
                 :white_id 222}]
       (get-playing 1 111 game) => 2
       (get-playing 2 222 game) => 1))
+
   (fact "returns 0 when user is not anonymous, but it's not her turn"
     (let [game {:black_id 111
                 :white_id 222}]
