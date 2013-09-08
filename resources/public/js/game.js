@@ -19,6 +19,7 @@ function draw_callback(x, y) {
         cmd: "make-move",
         game_id: game_id,
         user_id: user_id,
+        cookie: $.cookie("ring-session"),
         x: x,
         y: y
     };

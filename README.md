@@ -36,6 +36,8 @@ $ lein ring server
 You'll also need a freshly compiled greybear.js file from the goboard.js project: https://github.com/mapleoin/goboard.js . Clone it to ~/goboard and then run:
 `lein cljsbuild auto`.
 
+Note. jquery 2.x does not work on IE6,7,8
+
 ## License
 
 Copyright © 2013 FIXME
