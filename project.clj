@@ -14,7 +14,6 @@
                  [compojure "1.1.5"]
                  [hiccup "1.0.3"]
                  [com.cemerick/friend "0.1.5"]
-                 [sandbar/sandbar "0.4.0-SNAPSHOT"]
                  [midje "1.6-alpha3"]]
   :plugins [[lein-ring "0.8.3"]
             [lein-midje "3.0.0"]]

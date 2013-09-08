@@ -1,7 +1,6 @@
 (ns greybear.pages.layout
   (:require [cemerick.friend :as friend])
-  (:use [hiccup page element]
-        (sandbar stateful-session)))
+  (:use [hiccup page element]))
 
 (defn base-layout
   [subtitle request & content]
