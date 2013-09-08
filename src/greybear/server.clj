@@ -50,7 +50,7 @@
 
 (def app
   (-> (handler/site
-       (friend/authenticate 
+       (friend/authenticate
         main-routes
         {:allow-anon? true
          :login-uri "/login"
