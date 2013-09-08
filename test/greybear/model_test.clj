@@ -151,3 +151,24 @@
      (:white_id game)  BLACK        WHITE
      (:white_id game)  WHITE        nil
      ANONYMOUS         WHITE        nil)))
+
+(facts "about whos-turn"
+  (fact "when user is not playing the game"
+    (let [user-id 1]
+      (whos-turn ...game-id... user-id) => nil
+      (provided
+        (read-game ...game-id...) => {:black_id 0 :white_id 0})))
+
+  (fact "when user is in the current game"
+    (tabular
+     (let [game {:black_id 111
+                 :white_id 222}]
+       (whos-turn ...game-id... ?user-id) => ?result
+       (provided
+         (read-game ...game-id...) => game
+         (last-move ...game-id...) => {:player ?last-player}))
+     ?user-id ?last-player ?result
+     111      222          :me
+     111      111          :opponent
+     222      222          :opponent
+     222      111          :me)))

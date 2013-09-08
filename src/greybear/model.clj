@@ -130,6 +130,19 @@
      (and (= last-player BLACK) (= user-id (:white_id game))) WHITE
      (and (= last-player WHITE) (= user-id (:black_id game))) BLACK)))
 
+(defn whos-turn
+  "Returns:
+   nil - user is signed out or is not playing in this game
+   :me - it is the user's turn
+   :opponent - it is the opponent's turn"
+  [game-id user-id]
+  (let [game (read-game game-id)]
+    (if (or (= user-id (:black_id game))
+            (= user-id (:white_id game)))
+      (if (= user-id (:player (last-move game-id)))
+        :opponent
+        :me))))
+
 (defn create-user
   [username password]
   (try
