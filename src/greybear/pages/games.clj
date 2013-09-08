@@ -5,9 +5,9 @@
 
 (defn games [request]
   (base-layout "Games" request
-               [:div.row-fluid
-                [:div.span2]
-                [:div.span8
+               [:div.row
+                [:div.col-md-2]
+                [:div.col-md-8
                  [:table#games.table.table-condensed.table-hover
                   [:thead [:tr
                            [:th "#"] [:th "White"] [:th "Black"] [:th "Move"]]]
@@ -19,4 +19,4 @@
                       [:td (:white_id game)]
                       [:td (:black_id game)]
                       [:td (:moves game)]])]]]
-                [:div.span2]]))
+                [:div.col-md-2]]))

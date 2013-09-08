@@ -14,9 +14,9 @@
     (if game
       {:body
        (base-layout (str "Game #" game-id) request
-                    [:div#game-area.row-fluid
-                     [:div.span10 [:canvas#goBoard]]
-                     [:div.span2
+                    [:div#game-area.row
+                     [:div.col-md-10 [:canvas#goBoard]]
+                     [:div.col-md-2
                       [:div#players
                        "Players: " (game :white) " vs. " (game :black)
                        user-id]]]
