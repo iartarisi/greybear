@@ -112,7 +112,7 @@
                             (limit 1)))]
     (when move
       (let [[x y] (map parse-int (split (:move move) #"-"))]
-        {:player (if (= 0 (mod (:ordinal move) 2))
+        {:player (if (zero? (mod (:ordinal move) 2))
                    WHITE
                    BLACK)
          :x x
