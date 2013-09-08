@@ -121,6 +121,7 @@ function draw_stone(color, x, y) {
     } else {
         var fill_color = "white";
     }
+
     draw_circle(x, y, board["stone-radius"], fill_color, "black");
 };
 
