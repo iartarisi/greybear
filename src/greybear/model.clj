@@ -100,9 +100,10 @@
     (when (:stones game)
       (update-in game [:stones] #(map char %)))))
 
-(defn last-move [game-id]
+(defn last-move
   "Return a map like {:player BLACK :x 4 :y 5}
   Returns nil when there is no last move"
+  [game-id]
   (let [move (first (select moves
                             (where {:game_id game-id})
                             (order :ordinal :DESC)
