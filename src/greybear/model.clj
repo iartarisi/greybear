@@ -144,6 +144,11 @@
         :opponent
         :me))))
 
+(defn user-turn?
+  "Check if it's the current user's turn"
+  [game-id user-id]
+  (= :me (whos-turn game-id user-id)))
+
 (defn create-user
   [username password]
   (try

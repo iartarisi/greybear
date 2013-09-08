@@ -5,7 +5,9 @@
   (:require [clojure.data.json :as json])
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
-        [greybear.model :only [last-move make-move get-playing read-game]]))
+        [greybear.model :only [last-move make-move get-playing read-game
+                               user-turn?]]
+        [greybear.server :only [get-identity]]))
 
 (defn- stones-to-js
   "Transforms a list of chars into a JSON array
@@ -32,15 +34,20 @@
                             :last-x x
                             :last-y y}))))
 
+(defn make-move*
+  [conn message]
+  (let [user-id (:user-id (get-identity (:cookie message)))
+        game-id (:game_id message)]
+    (when (user-turn? game-id user-id)
+      (make-move game-id (str (:x message) "-" (:y message)))
+      (refresh conn message))))
+
 (defn on-message
   [conn mess]
   (let [message (json/read-json mess)]
     (case (:cmd message)
       "init-game" (refresh conn message)
-      "make-move" (do
-                    (make-move (:game_id message)
-                               (str (:x message) "-" (:y message)))
-                    (refresh conn message))
+      "make-move" (make-move* conn message)
       (.send conn (str "{\"cmd\": \"YO! " message "\"}")))))
 
 (defn -main
