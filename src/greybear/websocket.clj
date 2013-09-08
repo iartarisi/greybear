@@ -5,7 +5,7 @@
   (:require [clojure.data.json :as json])
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
-        [greybear.model :only [BLACK WHITE make-move last-move read-game]]))
+        [greybear.model :only [last-move make-move get-playing read-game]]))
 
 (defn- stones-to-js
   "Transforms a list of chars into a JSON array
@@ -19,36 +19,16 @@
   (.send conn "{\"cmd\": \"caca\"}"))
 
 
-(defn- opponent
-  "Return the opponent of a player i.e. WHITE for BLACK, BLACK for WHITE"
-  [player] (if (= player BLACK) WHITE BLACK))
-
-(defn get-playing
-  "Returns who is playing the next move:
-    0 - it is not the current user's turn
-    2 - it is the user's turn and she plays white
-    1 - it is the user's turn and she plays black"
-  [color user-id game]
-  (if (and (not= 0 user-id)
-           (case color
-             1 (= user-id (:black_id game))
-             2 (= user-id (:white_id game))))
-    ;; color represents the last move, but we want to draw the next move
-    (opponent color)
-    0))
-
 (defn refresh
   [conn message]
   (let [game-id (:game_id message)
         user-id (:user_id message)
         game (read-game game-id)
-        {:keys [last-player x y]
-         :or {last-player 1 x nil y nil}}
-        (last-move game-id)]
+        {:keys [x y] :or {x nil, y nil}} (last-move game-id)]
     (.send conn
            (json/write-str {:cmd "board"
                             :stones (stones-to-js (game :stones))
-                            :playing (get-playing last-player user-id game)
+                            :playing (get-playing game-id user-id)
                             :last-x x
                             :last-y y}))))
 

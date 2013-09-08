@@ -5,6 +5,7 @@
         [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
         [greybear.utils :only [place-stone parse-int]]))
 
+(def ^:const ANONYMOUS 0)
 (def ^:const BLACK 1)
 (def ^:const WHITE 2)
 (def ^:const starting-stones
@@ -115,6 +116,19 @@
                    BLACK)
          :x x
          :y y}))))
+
+(defn get-playing
+  "Return who is playing the next move
+    nil - it is not the current user's turn
+    WHITE - it is the user's turn and she plays white
+    BLACK - it is the user's turn and she plays black"
+  [game-id user-id]
+  (let [game (read-game game-id)
+        last-player (:player (last-move game-id))]
+    (cond
+     (and (nil? last-player) (= user-id (:black_id game))) BLACK
+     (and (= last-player BLACK) (= user-id (:white_id game))) WHITE
+     (and (= last-player WHITE) (= user-id (:black_id game))) BLACK)))
 
 (defn create-user
   [username password]

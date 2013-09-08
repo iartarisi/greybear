@@ -112,7 +112,7 @@ function draw_dots() {
 };
 
 function draw_stone(color, x, y) {
-    if (color == 0) {
+    if (color === null) {
         return;
     }
 

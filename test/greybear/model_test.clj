@@ -127,3 +127,27 @@
 
     (games-list) => [{:id 1 :black_id 1 :white_id 2 :moves 3}
                      {:id 2 :black_id 2 :white_id 1 :moves 1}]))
+
+
+(facts "about get-playing"
+  (fact "returns BLACK if there are no previous moves and current user is black"
+    (let [game {:black_id 111, :white_id 222}]
+      (get-playing ...game-id... (:black_id game)) => BLACK
+      (provided
+        (read-game ...game-id...) => game
+        (last-move ...game-id...) => nil)))
+  (fact "returns matching color when user is not anonymous"
+    (tabular
+     (let [game {:black_id 111
+                 :white_id 222}]
+       (get-playing ...game-id... ?user-id) => ?result
+       (provided
+         (read-game ...game-id...) => game
+         (last-move ...game-id...) => {:player ?player
+                                       :x irrelevant
+                                       :y irrelevant}))
+     ?user-id          ?player ?result
+     (:black_id game)  WHITE        BLACK
+     (:white_id game)  BLACK        WHITE
+     (:white_id game)  WHITE        nil
+     ANONYMOUS         WHITE        nil)))
