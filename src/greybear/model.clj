@@ -86,8 +86,9 @@
   (belongs-to player-w {:fk :white_id})
   (belongs-to player-b {:fk :black_id}))
 
-(defn read-game [game-id]
+(defn read-game
   "Return a 19x19 lazyseq of chars e.g. [\1 \0 \0 \2 ...]"
+  [game-id]
   (let [game (first (select games
                             (fields :stones
                                     [:white.name :white]
@@ -131,7 +132,7 @@
      (and (= last-player WHITE) (= user-id (:black_id game))) BLACK)))
 
 (defn whos-turn
-  "Returns:
+  "Return:
    nil - user is signed out or is not playing in this game
    :me - it is the user's turn
    :opponent - it is the opponent's turn"
