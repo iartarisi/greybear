@@ -17,7 +17,9 @@
      [:div.navbar.navbar-default
       [:div.navbar-header
        [:a.navbar-brand {:href "/"} "Greybear"]
-
+       [:ul.nav.navbar-nav.navbar-left
+        [:li
+         [:a {:href "/games"} "Games"]]]
        [:ul.nav.navbar-nav.navbar-right
         [:li
          (if-let [username (:username (friend/current-authentication
