@@ -19,6 +19,9 @@
        [:a.navbar-brand {:href "/"} "Greybear"]
        [:ul.nav.navbar-nav.navbar-left
         [:li
+         (if (friend/identity request)
+           [:a {:href "/new-game"} "New Game"])]
+        [:li
          [:a {:href "/games"} "Games"]]]
        [:ul.nav.navbar-nav.navbar-right
         [:li

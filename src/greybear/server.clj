@@ -23,6 +23,8 @@
        (friend/logout* (resp/redirect (str (:context request) "/"))))
   (GET "/requires-authentication" request
        (friend/authenticated "Thanks for authenticating!"))
+  (GET "/new-game" request
+       (friend/authenticated "Start a new game"))
   ;; (GET "/role-user" request
   ;;      (friend/authorize #{::users/user} "You're a user"))
   (GET "/" request (resp/redirect "/games"))
