@@ -2,15 +2,13 @@
   (:require [cemerick.friend :as friend])
   (:use [hiccup element page]
         [greybear.model :only [read-game whos-turn]]
+        [greybear.pages.helpers :only [get-user-id]]
         [greybear.pages.layout :only [base-layout]]
         [greybear.pages.errors :only [game-not-found]]))
 
 (defn game [request game-id]
   (let [game (read-game game-id)
-        user-id (or (:user-id
-                     (friend/current-authentication
-                      (friend/identity request)))
-                    0)]
+        user-id (get-user-id request)]
     (if game
       (base-layout (str "Game #" game-id) request
                    [:div#game-area.row
