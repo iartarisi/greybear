@@ -12,20 +12,19 @@
                       (friend/identity request)))
                     0)]
     (if game
-      {:body
-       (base-layout (str "Game #" game-id) request
-                    [:div#game-area.row
-                     [:div.col-md-10 [:canvas#goBoard]]
-                     [:div.col-md-2
-                      [:div#turn
-                       (case (whos-turn game-id user-id)
-                         :me [:span.label.label-danger "Your turn!"]
-                         :opponent [:span.label.label-warning "Opponent's turn."]
-                         [:span.label.label-default "Watching game."])]
-                      [:div#players
-                       "Players: " (game :white) " vs. " (game :black)]]]
-                    (include-js "/js/goboard.js"
-                                "/js/game.js")
-                    (javascript-tag
-                     (str "window.user_id = " user-id ";")))}
+      (base-layout (str "Game #" game-id) request
+                   [:div#game-area.row
+                    [:div.col-md-10 [:canvas#goBoard]]
+                    [:div.col-md-2
+                     [:div#turn
+                      (case (whos-turn game-id user-id)
+                        :me [:span.label.label-danger "Your turn!"]
+                        :opponent [:span.label.label-warning "Opponent's turn."]
+                        [:span.label.label-default "Watching game."])]
+                     [:div#players
+                      "Players: " (game :white) " vs. " (game :black)]]]
+                   (include-js "/js/goboard.js"
+                               "/js/game.js")
+                   (javascript-tag
+                    (str "window.user_id = " user-id ";")))
       (game-not-found game-id))))
