@@ -12,7 +12,7 @@
         [ring.middleware.session.store :only [read-session]]
         [ring.util.response :as resp]
         [greybear.model :only [players]]
-        [greybear.pages games game login]))
+        [greybear.pages games game login new-game]))
 
 (defroutes main-routes
   (GET "/games" request (games request))
@@ -24,7 +24,7 @@
   (GET "/requires-authentication" request
        (friend/authenticated "Thanks for authenticating!"))
   (GET "/new-game" request
-       (friend/authenticated "Start a new game"))
+       (new-game request))
   ;; (GET "/role-user" request
   ;;      (friend/authorize #{::users/user} "You're a user"))
   (GET "/" request (resp/redirect "/games"))
