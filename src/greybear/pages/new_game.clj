@@ -14,4 +14,6 @@
                    [:input {:type "hidden" :name "user-id"
                             :value (get-user-id request)}]
                    [:button.btn.btn-success "New Game"]]]
-                 [:div.col-md-5]])))
+                 [:div.col-md-5]]
+                [:div.row
+                 (games-partial)])))
