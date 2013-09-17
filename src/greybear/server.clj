@@ -25,6 +25,8 @@
        (friend/authenticated "Thanks for authenticating!"))
   (GET "/new-game" request
        (new-game request))
+  (POST "/new-game" {params :params}
+        (new-game-post params))
   ;; (GET "/role-user" request
   ;;      (friend/authorize #{::users/user} "You're a user"))
   (GET "/" request (resp/redirect "/games"))

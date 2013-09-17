@@ -1,6 +1,9 @@
 (ns greybear.pages.new-game
   (:require [cemerick.friend :as friend])
-  (:use [greybear.pages.helpers :only [get-user-id]]   
+  (:use [ring.util.response :as resp]
+        [greybear.model :only [create-game]]
+        [greybear.utils :only [parse-int]]
+        [greybear.pages.helpers :only [get-user-id]]   
         [greybear.pages.layout :only [base-layout]]
         [greybear.pages.games :only [games-partial]]))
 
@@ -17,3 +20,8 @@
                  [:div.col-md-5]]
                 [:div.row
                  (games-partial)])))
+
+(defn new-game-post [params]
+  (friend/authenticated
+   (resp/redirect
+    (str "/games/" (create-game (parse-int (params :user-id)) 1)))))
