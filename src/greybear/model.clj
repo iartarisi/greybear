@@ -157,7 +157,7 @@
     (catch org.postgresql.util.PSQLException e
       nil)))
 
-(defn new-game
+(defn create-game
   "Start a new game between two players, returns the new game's id"
   [black white]
   (:id (insert games

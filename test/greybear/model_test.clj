@@ -42,15 +42,15 @@
     (read-game 1) => {:white "user1" :black "user2" :black_id 2 :white_id 1
                       :stones (map char starting-stones)}))
 
-(facts "about new-game"
+(facts "about create-game"
   (fact "creating a game between inexistent users throws an error"
     ;; XXX think about raising better errors and at which layer
-    (new-game 1 2) => (throws PSQLException))
+    (create-game 1 2) => (throws PSQLException))
 
   (fact "saves new game to the database"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2) => 1
+    (create-game 1 2) => 1
     (select games) => [{:stones starting-stones
                         :white_id 2
                         :black_id 1
@@ -60,7 +60,7 @@
   (fact "saves a new move in the database"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
     (make-move 1 "1-1") => truthy
     (select moves) => [{:game_id 1, :ordinal 1, :move "1-1"}]
     (select games) => [{:black_id 1 :id 1 :white_id 2
@@ -69,7 +69,7 @@
   (fact "new moves have correct ordinals"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
     (make-move 1 "4-5")
     (make-move 1 "5-6")
     (make-move 1 "3-6")
@@ -81,7 +81,7 @@
   (fact "same move in one game should raise exception"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
     (make-move 1 "4-5")
 
     (make-move 1 "4-5") => (throws PSQLException #"duplicate key value violates unique constraint"))
@@ -89,7 +89,7 @@
   (fact "same ordinal in one game raises exception"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
     (make-move 1 "4-5")
 
     (insert moves
@@ -101,13 +101,13 @@
   (fact "returns nil values when there is no last move"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
 
     (last-move 1) => nil)
   (fact "returns last move"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
+    (create-game 1 2)
     (make-move 1 "4-5")
     (make-move 1 "5-6")
     (make-move 1 "14-3")
@@ -118,8 +118,8 @@
   (fact "returns a list of games with the right contents"
     (create-user "user1" "foo")
     (create-user "user2" "bar")
-    (new-game 1 2)
-    (new-game 2 1)
+    (create-game 1 2)
+    (create-game 2 1)
     (make-move 1 "4-5")
     (make-move 1 "5-6")
     (make-move 1 "14-3")
