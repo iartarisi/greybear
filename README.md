@@ -33,6 +33,11 @@ Start the webserver with:
 $ lein ring server
 ```
 
+Run tests continuously with:
+```
+$ lein midje :autotest
+```
+
 You'll also need a freshly compiled greybear.js file from the goboard.js project: https://github.com/mapleoin/goboard.js . Clone it to ~/goboard and then run:
 `lein cljsbuild auto`.
 
