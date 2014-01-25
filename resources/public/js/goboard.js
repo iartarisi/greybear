@@ -191,6 +191,10 @@ function setup_board() {
         board["canvas"].addEventListener('mousemove', mouse_move, false);
         board["canvas"].addEventListener('mouseout', mouse_out, false);
         board["canvas"].addEventListener('mouseup', mouse_up, false);
+    } else {
+        board["canvas"].removeEventListener('mousemove', mouse_move, false);
+        board["canvas"].removeEventListener('mouseout', mouse_out, false);
+        board["canvas"].removeEventListener('mouseup', mouse_up, false);
     }
 };
 
