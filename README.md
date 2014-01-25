@@ -18,7 +18,7 @@ Then just start a `lein repl` and create the tables and add some mock data:
 (create-user "swede" "death")
 (create-user "colin" "guns")
 ; 1, 2 are the respective `id`s of the users created above
-(new-game 1 2)
+(create-game 1 2)
 ```
 
 Start the websocket server with:
