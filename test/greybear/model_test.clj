@@ -38,7 +38,8 @@
                      :black_id (subselect players
                                           (fields :id)
                                           (where {:name [like "user2"]}))
-                     :stones starting-stones}))
+                     :stones starting-stones
+                     :active true}))
     (read-game 1) => {:white "user1" :black "user2" :black_id 2 :white_id 1
                       :stones (map char starting-stones)}))
 
@@ -54,6 +55,7 @@
     (select games) => [{:stones starting-stones
                         :white_id 2
                         :black_id 1
+                        :active true
                         :id 1}]))
 
 (facts "about make-move"
@@ -63,7 +65,7 @@
     (create-game 1 2)
     (make-move 1 "1-1") => truthy
     (select moves) => [{:game_id 1, :ordinal 1, :move "1-1"}]
-    (select games) => [{:black_id 1 :id 1 :white_id 2
+    (select games) => [{:black_id 1 :id 1 :white_id 2 :active true
                         :stones "0000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}])
 
   (fact "new moves have correct ordinals"

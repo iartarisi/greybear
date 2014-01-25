@@ -31,7 +31,8 @@
                        [:id :serial "primary key"]
                        [:white_id :serial "references players (id)"]
                        [:black_id :serial "references players (id)"]
-                       [:stones "varchar"])
+                       [:stones :varchar]
+                       [:active :boolean "NOT NULL"])
 
     (jdbc/create-table :moves
                        [:move "varchar"]
@@ -166,7 +167,8 @@
   (:id (insert games
                (values {:stones starting-stones
                         :white_id white
-                        :black_id black}))))
+                        :black_id black
+                        :active true}))))
 
 (defn make-move
   "Make a new move in a game
