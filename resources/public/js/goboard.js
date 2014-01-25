@@ -152,9 +152,7 @@ function draw_board() {
     if (board["last-x"]) {
         draw_last_move();
     }
-    if (shadow) {
-        draw_shadow();
-    }
+    draw_shadow();
 };
 
 function mouse_move(event) {
