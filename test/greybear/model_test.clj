@@ -168,7 +168,7 @@
          (read-game ...game-id...) => game
          (last-move ...game-id...) => {:player ?last-player}))
      ?user-id ?last-player ?result
-     111      222          :me
-     111      111          :opponent
-     222      222          :opponent
-     222      111          :me)))
+     111      WHITE        :me
+     111      BLACK        :opponent
+     222      WHITE        :opponent
+     222      BLACK        :me)))

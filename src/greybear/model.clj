@@ -137,12 +137,15 @@
    :me - it is the user's turn
    :opponent - it is the opponent's turn"
   [game-id user-id]
-  (let [game (read-game game-id)]
-    (if (or (= user-id (:black_id game))
-            (= user-id (:white_id game)))
-      (if (= user-id (:player (last-move game-id)))
-        :opponent
-        :me))))
+  (let [game (read-game game-id)
+        last-player (:player (last-move game-id))]
+    (cond
+     (= user-id (:black_id game)) (if (= BLACK last-player)
+                                    :opponent
+                                    :me)
+     (= user-id (:white_id game)) (if (= WHITE last-player)
+                                    :opponent
+                                    :me))))
 
 (defn user-turn?
   "Check if it's the current user's turn"
