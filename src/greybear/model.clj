@@ -169,7 +169,11 @@
                         :black_id black}))))
 
 (defn make-move
-  "Make a new move in a game"
+  "Make a new move in a game
+
+  game - a database game id
+  position - a string of the form '12-9'
+  "
   [game position]
   ;; TODO a subselect with coalesce would've been nicer, but korma
   ;; doesn't make that easy
