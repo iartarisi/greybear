@@ -31,11 +31,11 @@ ws.onmessage = function(message) {
     var cmd = data["cmd"];
     console.log(data["stones"]);
     switch (cmd) {
-        case "board":
-          go_board("goBoard", angular.fromJson(data["stones"]),
-                   data["playing"], draw_callback,
-                   data["last-x"], data["last-y"]);
-        default:
-          console.log("Got command: " + cmd);
+    case "board":
+        go_board("goBoard", angular.fromJson(data["stones"]),
+                 data["playing"], draw_callback,
+                 data["last-x"], data["last-y"]);
+    default:
+        console.log("Got command: " + cmd);
     }
 };
