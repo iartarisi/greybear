@@ -26,6 +26,20 @@ function draw_callback(x, y) {
     ws.send(JSON.stringify(msg));
 }
 
+function set_turn(turn) {
+    var elem = $("#turn span");
+    if (turn == "me") {
+        elem.text("Your turn!");
+        elem.attr("class", "label label-danger");
+    } else if (turn == "opponent"){
+        elem.text("Opponent's turn");
+        elem.attr("class", "label label-warning");
+    } else {
+        elem.text("Watching");
+        elem.attr("class", "label label-default");
+    }
+}
+
 ws.onmessage = function(message) {
     var data = angular.fromJson(message.data);
     var cmd = data["cmd"];
@@ -35,6 +49,7 @@ ws.onmessage = function(message) {
         go_board("goBoard", angular.fromJson(data["stones"]),
                  data["playing"], draw_callback,
                  data["last-x"], data["last-y"]);
+        set_turn(data["turn"]);
     default:
         console.log("Got command: " + cmd);
     }

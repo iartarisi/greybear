@@ -6,7 +6,7 @@
   (:use [clojure.string :only [split]]
         [greybear.utils :only [parse-int]]
         [greybear.model :only [last-move make-move get-playing read-game
-                               user-turn?]]
+                               user-turn? whos-turn]]
         [greybear.server :only [get-identity]]))
 
 (defn- stones-to-js
@@ -31,6 +31,7 @@
            (json/write-str {:cmd "board"
                             :stones (stones-to-js (game :stones))
                             :playing (get-playing game-id user-id)
+                            :turn (whos-turn game-id user-id)
                             :last-x x
                             :last-y y}))))
 
