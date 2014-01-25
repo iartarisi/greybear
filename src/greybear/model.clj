@@ -141,12 +141,16 @@
   (let [game (read-game game-id)
         last-player (:player (last-move game-id))]
     (cond
-     (= user-id (:black_id game)) (if (= BLACK last-player)
+     (= user-id (:black_id game)) (if (nil? last-player)
+                                    :me
+                                    (if (= BLACK last-player)
+                                      :opponent
+                                      :me))
+     (= user-id (:white_id game)) (if (nil? last-player)
                                     :opponent
-                                    :me)
-     (= user-id (:white_id game)) (if (= WHITE last-player)
-                                    :opponent
-                                    :me))))
+                                    (if (= WHITE last-player)
+                                      :opponent
+                                      :me)))))
 
 (defn user-turn?
   "Check if it's the current user's turn"

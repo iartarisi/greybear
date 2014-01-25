@@ -173,4 +173,6 @@
      111      WHITE        :me
      111      BLACK        :opponent
      222      WHITE        :opponent
-     222      BLACK        :me)))
+     222      BLACK        :me
+     111      nil          :me
+     222      nil          :opponent)))
