@@ -45,6 +45,6 @@ Note. jquery 2.x does not work on IE6,7,8
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013-2014 Ionuț Arțăriși <ionut@artarisi.eu>
 
-Distributed under the Eclipse Public License, the same as Clojure.
+Distributed under the terms of the GNU Affero General Public License.
