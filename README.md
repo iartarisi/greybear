@@ -1,6 +1,8 @@
 # greybear
 
-A Clojure library designed to ... well, that part is up to you.
+A [Go (the board game)](http://en.wikipedia.org/wiki/Go_%28game%29) server written in Clojure.
+
+This is a WIP project to build a Go server where players can play live against one another on a HTML5 board.
 
 ## Usage
 
