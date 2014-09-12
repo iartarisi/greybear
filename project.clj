@@ -11,6 +11,7 @@
                  [org.clojure/clojure "1.5.1"]
                  [org.clojure/data.json "0.2.2"]
                  [org.clojure/java.jdbc "0.3.0-alpha4"]
+                 [org.clojure/tools.logging "0.3.0"]
                  [org.postgresql/postgresql "9.2-1002-jdbc4"]
                  [org.webbitserver/webbit "0.4.14"]
                  [ring/ring-core "1.2.0"]
