@@ -18,6 +18,7 @@
 (ns greybear.model
   (:require [clojure.java.jdbc :as jdbc])
   (:use [clojure.string :only [split]]
+        [clojure.tools.logging :as log]
         [korma db core]
         [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
         [greybear.utils :only [place-stone parse-int]]))
@@ -185,11 +186,13 @@
 (defn create-game
   "Start a new game between two players, returns the new game's id"
   [black white]
-  (:id (insert games
+  (let [game-id (:id (insert games
                (values {:stones starting-stones
                         :white_id white
                         :black_id black
-                        :active true}))))
+                        :active true})))]
+    (log/info "Game" game-id "created between" black "and" white)
+    game-id))
 
 (defn make-move
   "Make a new move in a game
