@@ -31,8 +31,9 @@
                  [:div.col-md-5]
                  [:div.col-md-2
                   [:form {:method "post" :action "/new-game"}
-                   [:input {:type "hidden" :name "user-id"
+                   [:input {:type "hidden" :name "my-id"
                             :value (get-user-id request)}]
+                   [:input {:type "text" :name "opponent-id"}]
                    [:button.btn.btn-success "New Game"]]]
                  [:div.col-md-5]]
                 [:div.row
@@ -41,4 +42,6 @@
 (defn new-game-post [params]
   (friend/authenticated
    (resp/redirect
-    (str "/games/" (create-game (parse-int (params :user-id)) 1)))))
+    (str "/games/" (create-game
+                    (parse-int (params :my-id))
+                    (parse-int (params :opponent-id)))))))
