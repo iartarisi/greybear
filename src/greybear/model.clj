@@ -19,7 +19,7 @@
   (:use [clojure.string :only [split]]
         [clojure.tools.logging :as log]
         [korma db core]
-        [cemerick.friend.credentials :only [hash-bcrypt bcrypt-verify]]
+        [cemerick.friend.credentials :only [hash-bcrypt]]
         greybear.model.ddl
         [greybear.utils :only [place-stone parse-int]]))
 
@@ -156,3 +156,11 @@
           (join moves)
           (aggregate (count :moves.ordinal) :moves :games.id)
           (order :games.id :ASC)))
+
+(defn load-credentials
+  [user]
+  (first (select players
+                 (fields [:name :username]
+                         [:id :user-id]
+                         :password)
+                 (where {:name user}))))

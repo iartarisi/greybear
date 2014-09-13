@@ -2,6 +2,7 @@
   (:import org.postgresql.util.PSQLException)
   (:require [clojure.java.jdbc :as jdbc])
   (:use midje.sweet
+        [cemerick.friend.credentials :only [bcrypt-verify]]
         [korma core db]
         greybear.model))
 
@@ -176,3 +177,11 @@
      222      BLACK        :me
      111      nil          :me
      222      nil          :opponent)))
+
+(facts "about load-credentials"
+  (fact "returns the right credentials"
+    (create-user "tux" "secret")
+    (let [creds (load-credentials "tux")]
+      (:username creds) => "tux"
+      (:user-id creds) => 1
+      (bcrypt-verify "secret" (:password creds)) => true)))

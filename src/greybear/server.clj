@@ -28,7 +28,7 @@
         [ring.middleware.session.cookie :only [cookie-store]]
         [ring.middleware.session.store :only [read-session]]
         [ring.util.response :as resp]
-        [greybear.model.ddl :only [players]]
+        [greybear.model :only [load-credentials]]
         [greybear.pages games game login new-game]))
 
 (defroutes main-routes
@@ -49,14 +49,6 @@
   (GET "/" request (resp/redirect "/games"))
   (route/resources "/")
   (route/not-found "Page not found"))
-
-(defn load-credentials
-  [user]
-  (first (select players
-                 (fields [:name :username]
-                         [:id :user-id]
-                         :password)
-                 (where {:name user}))))
 
 (def ^:const session-key "a 16-byte secret")
 (def grey-session-store
