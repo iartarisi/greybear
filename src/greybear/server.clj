@@ -28,7 +28,7 @@
         [ring.middleware.session.cookie :only [cookie-store]]
         [ring.middleware.session.store :only [read-session]]
         [ring.util.response :as resp]
-        [greybear.model :only [players]]
+        [greybear.model.ddl :only [players]]
         [greybear.pages games game login new-game]))
 
 (defroutes main-routes
