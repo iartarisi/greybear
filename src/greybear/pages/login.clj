@@ -19,8 +19,12 @@
   (:use [hiccup element form]
         [greybear.pages.layout :only [base-layout]]))
 
-(defn login-get [request]
+(defn login-get [request login_failed]
   (base-layout "Login" request
+               (if (= login_failed "Y")
+                 [:div.alert.alert-danger {:role "alert"}
+                  "Login failed. "
+                  "The username or password you provided are incorrect."])
                [:div#login
                 (form-to [:post "/login"]
                          [:div#username (text-field "username")]

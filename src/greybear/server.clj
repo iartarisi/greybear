@@ -35,7 +35,8 @@
   (GET "/games" request (games request))
   (GET ["/games/:id", :id #"[0-9]+"] [id :as request]
        (game request (Integer. id)))
-  (GET "/login" request (login-get request))
+  (GET "/login" [login_failed :as request]
+       (login-get request login_failed))
   (GET "/logout" request
        (friend/logout* (resp/redirect (str (:context request) "/"))))
   (GET "/requires-authentication" request
