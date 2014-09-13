@@ -35,6 +35,11 @@ Start the webserver with:
 $ lein ring server
 ```
 
+
+## Testing
+
+Create the 'greybear-test' database, user and password.
+
 Run tests continuously with:
 ```
 $ lein midje :autotest
