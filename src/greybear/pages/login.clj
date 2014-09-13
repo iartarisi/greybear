@@ -20,13 +20,42 @@
         [greybear.pages.layout :only [base-layout]]))
 
 (defn login-get [request login_failed]
-  (base-layout "Login" request
-               (if (= login_failed "Y")
-                 [:div.alert.alert-danger {:role "alert"}
-                  "Login failed. "
-                  "The username or password you provided are incorrect."])
-               [:div#login
-                (form-to [:post "/login"]
-                         [:div#username (text-field "username")]
-                         [:div#password (password-field "password")]
-                         (submit-button "login"))]))
+  (base-layout
+   "Login" request
+   [:div.row
+    [:div.col-md-4]
+    [:div.col-md-4
+     [:div.panel.panel-default
+      [:div.panel-heading "Login"]
+      [:div.panel-body
+       (if (= login_failed "Y")
+         [:div.alert.alert-danger {:role "alert"}
+          "Login failed. "
+          "The username or password you provided are incorrect."])
+
+       [:div#login
+        (form-to
+         [:post "/login"]
+         [:div.row
+          [:div.col-md-2]
+          [:div.col-md-8
+           [:div.form-group
+            (label "input-username" "Username:")
+            (text-field {:id "input-username"
+                         :class "form-control"
+                         :placeholder "username"}
+                        "username")]
+           [:div.form-group
+            (label "input-password" "Password:")
+            (password-field {:id "input-password"
+                             :class "form-control"
+                             :placeholder "password"}
+                            "password")]]
+          [:div.col-md-2]]
+         [:div.row
+          [:div.col-md-4]
+          [:div.col-md-4
+           [:div.form-group (submit-button {:class "btn btn-primary"}
+                                           "Login")]]
+          [:div.col-md-4]])]]]]
+    [:div.col-md-4]]))
