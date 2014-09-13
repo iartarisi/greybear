@@ -16,7 +16,7 @@ Then just start a `lein repl` and create the tables and add some mock data:
 (require '[clojure.java.jdbc :as jdbc])
 (use 'greybear.model)
 ; creates tables
-(jdbc/with-connection psql (setup))
+(setup psql)
 (create-user "swede" "death")
 (create-user "colin" "guns")
 ; 1, 2 are the respective `id`s of the users created above

@@ -5,16 +5,16 @@
         [korma core db]
         greybear.model))
 
-(def ^:dynamic test-conn {:classname "org.postgresql.Driver"
-                          :subprotocol "postgresql"
-                          :subname "//localhost/greybear-test"
-                          :user "greybear-test"
-                          :password "greybear-test"})
+(def ^:dynamic test-db-spec {:classname "org.postgresql.Driver"
+                             :subprotocol "postgresql"
+                             :subname "//localhost/greybear-test"
+                             :user "greybear-test"
+                             :password "greybear-test"})
 
 (namespace-state-changes
- [(around :facts (jdbc/with-connection test-conn ?form))
-  (before :facts (jdbc/with-connection test-conn (setup)))
-  (after :facts (jdbc/with-connection test-conn (teardown)))])
+ [(around :facts (with-db test-db-spec ?form))
+  (before :facts (setup test-db-spec))
+  (after :facts (teardown test-db-spec))])
 
 (facts "about create-user"
   (fact "creates a new player in the database"
@@ -64,7 +64,7 @@
     (create-user "user2" "bar")
     (create-game 1 2)
     (make-move 1 "1-1") => truthy
-    (select moves) => [{:game_id 1, :ordinal 1, :move "1-1"}]
+    (select moves) => [{:games_id 1, :ordinal 1, :move "1-1"}]
     (select games) => [{:black_id 1 :id 1 :white_id 2 :active true
                         :stones "0000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}])
 
@@ -96,7 +96,7 @@
 
     (insert moves
             (values {:move "3-10"
-                     :game_id 1
+                     :games_id 1
                      :ordinal 1})) => (throws PSQLException #"duplicate key value violates unique constraint")))
 
 (facts "about last-move"

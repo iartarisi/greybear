@@ -37,37 +37,39 @@
            :password "greybear"})
 
 (defn setup
-  "use with a jdbc connection"
-  []
+  "Setup the database tables"
+  [dbspec]
   (try
-    (jdbc/create-table :players
-                       [:id :serial "primary key"]
-                       [:name "varchar" :unique]
-                       [:password "varchar"])
+    (jdbc/db-do-commands dbspec
+     (jdbc/create-table-ddl :players
+                            [:id :serial "primary key"]
+                            [:name "varchar" :unique]
+                            [:password "varchar"])
 
-    (jdbc/create-table :games
-                       [:id :serial "primary key"]
-                       [:white_id :serial "references players (id)"]
-                       [:black_id :serial "references players (id)"]
-                       [:stones :varchar]
-                       [:active :boolean "NOT NULL"])
+     (jdbc/create-table-ddl :games
+                            [:id :serial "primary key"]
+                            [:white_id :serial "references players (id)"]
+                            [:black_id :serial "references players (id)"]
+                            [:stones :varchar]
+                            [:active :boolean "NOT NULL"])
 
-    (jdbc/create-table :moves
-                       [:move "varchar"]
-                       [:ordinal "smallint"]
-                       [:game_id :serial "references games (id)"]
-                       ["PRIMARY KEY" "(game_id, ordinal)"]
-                       ["UNIQUE" "(game_id, move)"])
+     (jdbc/create-table-ddl :moves
+                            [:move "varchar"]
+                            [:ordinal "smallint"]
+                            [:games_id :serial "references games (id)"]
+                            ["PRIMARY KEY" "(games_id, ordinal)"]
+                            ["UNIQUE" "(games_id, move)"]))
     (catch Exception e
       (.getNextException e))))
 
 (defn teardown
   "use with a jdbc connection"
-  []
+  [dbspec]
   (try
-    (jdbc/drop-table :moves)
-    (jdbc/drop-table :games)
-    (jdbc/drop-table :players)
+    (jdbc/db-do-commands dbspec
+                         (jdbc/drop-table-ddl :moves)
+                         (jdbc/drop-table-ddl :games)
+                         (jdbc/drop-table-ddl :players))
     (catch Exception e
       (.getNextException e))))
 
@@ -77,7 +79,6 @@
 
 (defentity players
   (table :players)
-  (entity-fields :name :password)
   (has-many games {:fk :black_id}))
 
 ;; player-a and player-b are just hacks to lie to korma that we have two
@@ -85,23 +86,21 @@
 ;; FKs to the same table
 (defentity player-b
   (table :players)
-  (entity-fields :name)
+  (fields :name)
   (has-many games {:fk :black_id}))
 
 (defentity player-w
   (table :players)
-  (entity-fields :name)
+  (fields :name)
   (has-many games {:fk :white_id}))
 
 (defentity moves
   (table :moves)
-  (entity-fields :move :order)
-  (belongs-to games {:fk :game_id}))
+  (belongs-to games {:fk :games_id}))
 
 (defentity games
   (table :games)
-  (entity-fields :board :white :black :moves)
-  (has-many moves {:fk :game_id})
+  (has-many moves)
   (belongs-to player-w {:fk :white_id})
   (belongs-to player-b {:fk :black_id}))
 
@@ -126,7 +125,7 @@
   Returns nil when there is no last move"
   [game-id]
   (let [move (first (select moves
-                            (where {:game_id game-id})
+                            (where {:games_id game-id})
                             (order :ordinal :DESC)
                             (limit 1)))]
     (when move
@@ -206,7 +205,7 @@
   (let [next-ordinal (+ 1 (or (:max
                                (first
                                 (select moves
-                                        (where {:game_id game})
+                                        (where {:games_id game})
                                         (aggregate (max :ordinal) :max))))
                               0))
         color (if (odd? next-ordinal) \1 \2)]
@@ -215,7 +214,7 @@
     (transaction
      (insert moves
              (values {:move position
-                      :game_id game
+                      :games_id game
                       :ordinal next-ordinal}))
      (update games
              (set-fields {:stones
