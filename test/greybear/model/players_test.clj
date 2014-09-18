@@ -18,3 +18,12 @@
     (get-player 1) => {:id 1, :name "foo", :password "bar"})
   (fact "returns nil when player does not exist"
     (get-player 404) => nil))
+
+(facts "about create-player"
+  (fact "creates a new player in the database"
+    (create-player "foo" "bar") => truthy
+    (select players (fields :name)) => [{:name "foo"}])
+
+  (fact "doesn't raise an error if the user already exists"
+    (create-player "foo" "bar") => truthy
+    (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))

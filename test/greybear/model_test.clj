@@ -5,6 +5,7 @@
         [cemerick.friend.credentials :only [bcrypt-verify]]
         [korma core db]
         greybear.model.ddl
+        [greybear.model.players :only [create-player]]
         greybear.model))
 
 (def ^:dynamic test-db-spec {:classname "org.postgresql.Driver"
@@ -18,21 +19,12 @@
   (before :facts (setup test-db-spec))
   (after :facts (teardown test-db-spec))])
 
-(facts "about create-user"
-  (fact "creates a new player in the database"
-    (create-user "foo" "bar") => truthy
-    (select players (fields :name)) => [{:name "foo"}])
-
-  (fact "doesn't raise an error if the user already exists"
-    (create-user "foo" "bar") => truthy
-    (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))
-
 (facts "about read-game"
   (fact "returns nil when a game could not be found"
     (read-game 1) => nil)
   (fact "reads a game initialized to an empty board"
-    (create-user "user1" "foo")
-    (create-user "user2" "foo")
+    (create-player "user1" "foo")
+    (create-player "user2" "foo")
     (insert games
             (values {:white_id (subselect players
                                           (fields :id)
@@ -51,8 +43,8 @@
     (create-game 1 2) => (throws PSQLException))
 
   (fact "saves new game to the database"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2) => 1
     (select games) => [{:stones starting-stones
                         :white_id 2
@@ -62,8 +54,8 @@
 
 (facts "about make-move"
   (fact "saves a new move in the database"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (make-move 1 "1-1") => truthy
     (select moves) => [{:games_id 1, :ordinal 1, :move "1-1"}]
@@ -71,8 +63,8 @@
                         :stones "0000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}])
 
   (fact "new moves have correct ordinals"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (make-move 1 "4-5")
     (make-move 1 "5-6")
@@ -83,16 +75,16 @@
 
   ;; TODO - raise better exceptions here and bellow
   (fact "same move in one game should raise exception"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (make-move 1 "4-5")
 
     (make-move 1 "4-5") => (throws PSQLException #"duplicate key value violates unique constraint"))
 
   (fact "same ordinal in one game raises exception"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (make-move 1 "4-5")
 
@@ -103,14 +95,14 @@
 
 (facts "about last-move"
   (fact "returns nil values when there is no last move"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
 
     (last-move 1) => nil)
   (fact "returns last move"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (make-move 1 "4-5")
     (make-move 1 "5-6")
@@ -120,8 +112,8 @@
 
 (facts "about games"
   (fact "returns a list of games with the right contents"
-    (create-user "user1" "foo")
-    (create-user "user2" "bar")
+    (create-player "user1" "foo")
+    (create-player "user2" "bar")
     (create-game 1 2)
     (create-game 2 1)
     (make-move 1 "4-5")
@@ -181,7 +173,7 @@
 
 (facts "about load-credentials"
   (fact "returns the right credentials"
-    (create-user "tux" "secret")
+    (create-player "tux" "secret")
     (let [creds (load-credentials "tux")]
       (:username creds) => "tux"
       (:user-id creds) => 1

@@ -17,9 +17,18 @@
 
 (ns greybear.model.players
   (:use [korma core]
+        [cemerick.friend.credentials :only [hash-bcrypt]]
         [greybear.model.ddl :only [players]]))
 
 
 (defn get-player
   [player-id]
   (first (select players (where {:id player-id}))))
+
+(defn create-player
+  [username password]
+  (try
+    (insert players
+            (values {:name username :password (hash-bcrypt password)}))
+    (catch org.postgresql.util.PSQLException e
+      nil)))

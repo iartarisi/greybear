@@ -19,7 +19,7 @@
   (:use [clojure.string :only [split]]
         [clojure.tools.logging :as log]
         [korma db core]
-        [cemerick.friend.credentials :only [hash-bcrypt]]
+
         greybear.model.ddl
         [greybear.utils :only [place-stone parse-int]]))
 
@@ -98,14 +98,6 @@
   "Check if it's the current user's turn"
   [game-id user-id]
   (= :me (whos-turn game-id user-id)))
-
-(defn create-user
-  [username password]
-  (try
-    (insert players
-            (values {:name username :password (hash-bcrypt password)}))
-    (catch org.postgresql.util.PSQLException e
-      nil)))
 
 (defn create-game
   "Start a new game between two players, returns the new game's id"
