@@ -20,10 +20,12 @@
     (get-player 404) => nil))
 
 (facts "about create-player"
-  (fact "creates a new player in the database"
-    (create-player "foo" "bar") => truthy
-    (select players (fields :name)) => [{:name "foo"}])
+  (fact "creates new players in the database"
+    (create-player "foo" "bar") => 1
+    (select players (fields :name)) => [{:name "foo"}]
+    (create-player "baz" "secret") => 2
+    (create-player "qux" "secret") => 3)
 
   (fact "doesn't raise an error if the user already exists"
-    (create-player "foo" "bar") => truthy
+    (create-player "foo" "bar") => 1
     (select players (aggregate (count :*) :cnt)) => [{:cnt 1}]))

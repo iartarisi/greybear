@@ -26,9 +26,10 @@
   (first (select players (where {:id player-id}))))
 
 (defn create-player
+  "Inserts a new player into the database and returns its id"
   [username password]
-  (try
-    (insert players
-            (values {:name username :password (hash-bcrypt password)}))
-    (catch org.postgresql.util.PSQLException e
-      nil)))
+  (:id (try
+         (insert players
+                 (values {:name username :password (hash-bcrypt password)}))
+         (catch org.postgresql.util.PSQLException e
+           nil))))
