@@ -4,6 +4,7 @@
   (:use midje.sweet
         [cemerick.friend.credentials :only [bcrypt-verify]]
         [korma core db]
+        greybear.model.ddl
         greybear.model))
 
 (def ^:dynamic test-db-spec {:classname "org.postgresql.Driver"
