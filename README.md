@@ -14,13 +14,12 @@ Then just start a `lein repl` and create the tables and add some mock data:
 
 ```clojure
 (require '[clojure.java.jdbc :as jdbc])
-(use 'greybear.model)
+(use 'greybear.model.ddl)
 ; creates tables
 (setup psql)
-(create-user "swede" "death")
-(create-user "colin" "guns")
+(create-player "swede" "death")
+(create-player "colin" "guns")
 ; 1, 2 are the respective `id`s of the users created above
-(create-game 1 2)
 ```
 
 Start the websocket server with:
