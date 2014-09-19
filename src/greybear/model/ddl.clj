@@ -33,7 +33,8 @@
      (jdbc/create-table-ddl :players
                             [:id :serial "primary key"]
                             [:name "varchar" :unique]
-                            [:password "varchar"])
+                            [:password "varchar"]
+                            [:looking :boolean "NOT NULL" "DEFAULT FALSE"])
 
      (jdbc/create-table-ddl :games
                             [:id :serial "primary key"]

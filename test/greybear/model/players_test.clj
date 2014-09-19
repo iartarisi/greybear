@@ -15,7 +15,7 @@
   (fact "returns player when it exists"
     (insert players
             (values {:name "foo" :password "bar"})) => truthy
-    (get-player 1) => {:id 1, :name "foo", :password "bar"})
+    (get-player 1) => {:id 1, :name "foo", :password "bar" :looking false})
   (fact "returns nil when player does not exist"
     (get-player 404) => nil))
 
