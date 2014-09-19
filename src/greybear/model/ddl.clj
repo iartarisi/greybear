@@ -48,7 +48,11 @@
                             [:ordinal "smallint"]
                             [:games_id :serial "references games (id)"]
                             ["PRIMARY KEY" "(games_id, ordinal)"]
-                            ["UNIQUE" "(games_id, move)"]))
+                            ["UNIQUE" "(games_id, move)"])
+
+     (jdbc/create-table-ddl :game_invitations
+                            [:white_id :serial "references players (id)"]
+                            [:black_id :serial "references players (id)"]))
     (catch Exception e
       (.getNextException e))))
 
@@ -59,6 +63,7 @@
     (jdbc/db-do-commands dbspec
                          (jdbc/drop-table-ddl :moves)
                          (jdbc/drop-table-ddl :games)
+                         (jdbc/drop-table-ddl :game_invitations)
                          (jdbc/drop-table-ddl :players))
     (catch Exception e
       (.getNextException e))))
@@ -91,5 +96,10 @@
 (defentity games
   (table :games)
   (has-many moves)
+  (belongs-to player-w {:fk :white_id})
+  (belongs-to player-b {:fk :black_id}))
+
+(defentity game-invitations
+  (table :game_invitations)
   (belongs-to player-w {:fk :white_id})
   (belongs-to player-b {:fk :black_id}))
