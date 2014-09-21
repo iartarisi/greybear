@@ -10,16 +10,10 @@ To setup the database. Create a `greybear` database with a user
 `greybear` and a password `greybear`. You can also change these values
 in `src/greybear/model.clj`.
 
-Then just start a `lein repl` and create the tables and add some mock data:
+Setup the database with the provided lein plugin:
 
-```clojure
-(require '[clojure.java.jdbc :as jdbc])
-(use 'greybear.model.ddl)
-; creates tables
-(setup psql)
-(create-player "swede" "death")
-(create-player "colin" "guns")
-; 1, 2 are the respective `id`s of the users created above
+```bash
+$ lein db setup
 ```
 
 Start the websocket server with:
