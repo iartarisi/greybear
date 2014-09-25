@@ -18,6 +18,8 @@
                  [ring/ring-jetty-adapter "1.1.8"]]
   :plugins [[lein-ring "0.8.3"]
             [lein-midje "3.0.0"]]
-  :eval-in-leiningen true
   :main greybear.websocket
-  :ring {:handler greybear.server/app})
+  :ring {:handler greybear.server/app}
+  :aliases {"setup-db" ["run" "-m" "greybear.model.dbcli/setup"]
+            "teardown-db" ["run" "-m" "greybear.model.dbcli/teardown"]}
+  )
