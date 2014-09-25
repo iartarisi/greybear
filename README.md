@@ -19,7 +19,7 @@ $ lein db setup
 Start the websocket server with:
 
 ```
-$ lein run
+$ lein websockets
 ```
 
 Start the webserver with:
