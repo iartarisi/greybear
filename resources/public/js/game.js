@@ -41,12 +41,12 @@ function set_turn(turn) {
 }
 
 ws.onmessage = function(message) {
-    var data = angular.fromJson(message.data);
+    var data = JSON.parse(message.data);
     var cmd = data["cmd"];
     console.log(data["stones"]);
     switch (cmd) {
     case "board":
-        go_board("goBoard", angular.fromJson(data["stones"]),
+        go_board("goBoard", JSON.parse(data["stones"]),
                  data["playing"], draw_callback,
                  data["last-x"], data["last-y"]);
         set_turn(data["turn"]);

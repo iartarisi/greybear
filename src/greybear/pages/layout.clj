@@ -27,8 +27,7 @@
     (include-css "/bootstrap/css/bootstrap.css")
     (include-css "/style.css")
     (include-js "/js/jquery/jquery-2.0.3.js")
-    (include-js "/js/jquery/jquery.cookie.js")
-    (include-js "https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js")]
+    (include-js "/js/jquery/jquery.cookie.js")]
    [:body
     [:div#content.container
      [:div.navbar.navbar-default
