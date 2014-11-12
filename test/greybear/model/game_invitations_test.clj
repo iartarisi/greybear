@@ -23,3 +23,24 @@
   (fact "does not create a invitation between one player"
     (let [player-id (create-player "black" "secret")]
       (create-game-invitation player-id player-id) => nil)))
+
+(facts "about invited-by"
+  (fact "returns nothing when there are no invitations"
+    (create-player "santa" "secret")
+    (invited-by 1) => ())
+  (fact "returns the right guest when there are multiple invitations"
+    (let [test-host-id (create-player "player1" "secret")
+          test-guest1-id (create-player "player2" "secret")
+          test-guest2-id (create-player "player3" "secret")
+          other-id (create-player "player4" "secret")]
+
+      (create-game-invitation test-host-id test-guest1-id)
+      (create-game-invitation test-host-id test-guest2-id)
+
+      (create-game-invitation test-guest1-id other-id)
+      (create-game-invitation test-guest1-id test-host-id)
+      (create-game-invitation other-id test-host-id)
+
+      (let [result (invited-by test-host-id)]
+        (count result) => 2
+        (map :id result) => (list test-guest1-id test-guest2-id)))))

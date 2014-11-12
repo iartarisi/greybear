@@ -17,7 +17,7 @@
 
 (ns greybear.model.game-invitations
   (:use [korma core]
-        [greybear.model.ddl :only [game-invitations]]
+        [greybear.model.ddl :only [game-invitations players]]
         [greybear.model.players :only [get-player]]))
 
 
@@ -30,3 +30,10 @@
     (insert game-invitations
             (values {:host_id host-id
                      :guest_id guest-id}))))
+
+(defn invited-by
+  "Return a list of the players invited by :player:"
+  [player-id]
+  (select players
+          (join :inner game-invitations (= :game_invitations.guest_id :id))
+          (where (= :game_invitations.host_id player-id))))
