@@ -31,12 +31,13 @@
                 [:div.row
                  [:div.col-md-3]
                  [:div.col-md-6
-                  [:form {:method "post" :action "/new-game"}
-                   [:input {:type "hidden" :name "my-id"
-                            :value (get-user-id request)}]
-                   (label "opponent-id" "Invite a player:")
-                   [:input {:type "text" :name "opponent-id"}]
-                   [:button.btn.btn-success "New Game"]]]
+                  (form-to [:post "/new-game"]
+                           [:input {:type "hidden" :name "my-id"
+                                     :value (get-user-id request)}]
+                            (label "opponent-id" "Invite a player:")
+                            [:input {:type "text" :name "opponent-id"}]
+                            [:button.btn.btn-success "New Game"])
+                  ]
                  [:div.col-md-3]]
                 [:div.row
                  (games-partial)])))
