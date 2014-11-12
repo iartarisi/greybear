@@ -22,8 +22,24 @@
         [greybear.model.game-invitations]
         [greybear.utils :only [parse-int]]
         [greybear.pages.helpers :only [get-user-id]]   
-        [greybear.pages.layout :only [base-layout]]
-        [greybear.pages.games :only [games-partial]]))
+        [greybear.pages.layout :only [base-layout]]))
+
+
+(defn players-list
+  "Outputs a list of players with some information about each"
+  [players]
+  [:div.row
+   [:table.table.table-striped
+    [:thead
+     [:tr
+      [:th "#"]
+      [:th "Username"]]
+     ]
+    [:tbody
+     (for [[idx player] (map-indexed vector players)]
+       [:tr
+        [:td (+ idx 1)]
+        [:td (:name player)]])]]])
 
 (defn new-game [request]
   (friend/authenticated
@@ -40,7 +56,11 @@
                   ]
                  [:div.col-md-3]]
                 [:div.row
-                 (games-partial)])))
+                 [:div.col-md-1]
+                 [:div.col-md-10
+                  [:p "Pending invitations: "]
+                  (players-list (invited-by (get-user-id request)))]
+                 [:div.col-md-1]])))
 
 (defn new-game-post [params]
   (friend/authenticated
