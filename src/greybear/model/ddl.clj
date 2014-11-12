@@ -51,8 +51,8 @@
                             ["UNIQUE" "(games_id, move)"])
 
      (jdbc/create-table-ddl :game_invitations
-                            [:white_id :serial "references players (id)"]
-                            [:black_id :serial "references players (id)"]))
+                            [:host_id :serial "references players (id)"]
+                            [:guest_id :serial "references players (id)"]))
     (catch Exception e
       (.getNextException e))))
 

@@ -23,10 +23,10 @@
 
 (defn create-game-invitation
   "Start looking for a new game"
-  [white-id black-id]
-  (when (and (not= white-id black-id)
-             (get-player black-id)
-             (get-player white-id))
+  [host-id guest-id]
+  (when (and (not= host-id guest-id)
+             (get-player guest-id)
+             (get-player host-id))
     (insert game-invitations
-            (values {:black_id black-id
-                     :white_id white-id}))))
+            (values {:host_id host-id
+                     :guest_id guest-id}))))

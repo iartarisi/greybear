@@ -16,8 +16,8 @@
   (fact "creates a game invitation"
     (let [white-id (create-player "white" "secret")
           black-id (create-player "black" "secret")]
-      (create-game-invitation white-id black-id) => {:white_id white-id
-                                                   :black_id black-id}))
+      (create-game-invitation white-id black-id) => {:host_id white-id
+                                                     :guest_id black-id}))
   (fact "does not create a invitation when one of the players does not exist"
     (create-game-invitation 404 403) => nil)
   (fact "does not create a invitation between one player"
