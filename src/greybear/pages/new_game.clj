@@ -17,7 +17,8 @@
 
 (ns greybear.pages.new-game
   (:require [cemerick.friend :as friend])
-  (:use [ring.util.response :as resp]
+  (:use [hiccup form]
+        [ring.util.response :as resp]
         [greybear.model :only [create-game]]
         [greybear.utils :only [parse-int]]
         [greybear.pages.helpers :only [get-user-id]]   
@@ -28,14 +29,15 @@
   (friend/authenticated
    (base-layout "Start a new game" request
                 [:div.row
-                 [:div.col-md-5]
-                 [:div.col-md-2
+                 [:div.col-md-3]
+                 [:div.col-md-6
                   [:form {:method "post" :action "/new-game"}
                    [:input {:type "hidden" :name "my-id"
                             :value (get-user-id request)}]
+                   (label "opponent-id" "Invite a player:")
                    [:input {:type "text" :name "opponent-id"}]
                    [:button.btn.btn-success "New Game"]]]
-                 [:div.col-md-5]]
+                 [:div.col-md-3]]
                 [:div.row
                  (games-partial)])))
 
