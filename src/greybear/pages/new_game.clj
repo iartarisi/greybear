@@ -19,7 +19,7 @@
   (:require [cemerick.friend :as friend])
   (:use [hiccup form]
         [ring.util.response :as resp]
-        [greybear.model :only [create-game]]
+        [greybear.model.game-invitations]
         [greybear.utils :only [parse-int]]
         [greybear.pages.helpers :only [get-user-id]]   
         [greybear.pages.layout :only [base-layout]]
@@ -45,6 +45,6 @@
 (defn new-game-post [params]
   (friend/authenticated
    (resp/redirect
-    (str "/games/" (create-game
+    (str "/games/" (create-game-invitation
                     (parse-int (params :my-id))
                     (parse-int (params :opponent-id)))))))
